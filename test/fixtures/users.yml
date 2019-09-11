@@ -3,9 +3,9 @@
 one:
   username: Name1
   email: ex@mp.le
-  password_digest: Diva_roach
+  password_digest: $2a$12$fhG3ONuNX5igJRUMRUxc6u9ZosDqP1ORxxj9o09wAwHEaWLwtwoVq
 
 two:
   username: name2
   email: exam@ple.email
-  password_digest: Diva_roach
+  password_digest: $2a$12$fhG3ONuNX5igJRUMRUxc6u9ZosDqP1ORxxj9o09wAwHEaWLwtwoVq

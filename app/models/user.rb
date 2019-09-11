@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :posts
   validates :username, presence: true, length: { maximum: 255 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@([a-z\d\-]+\.)+[a-z]+\z/i.freeze
   validates :email, presence: true, length: { maximum: 255 },
