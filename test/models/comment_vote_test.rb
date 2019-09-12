@@ -5,8 +5,9 @@ class CommentVoteTest < ActiveSupport::TestCase
     User.create(username: 'Name', email: 'ex@mp.le', password: 'Abcdefgh',
                 password_confirmation: 'Abcdefgh')
     Post.create(title: 'Title', body: 'Body', user_id: User.last.id)
-    @comment_vote = CommentVote.new(user_id: User.last.id, post_id: Post.last.id,
-                              up: true)
+    Comment.create(text: 'Text', user_id: User.last.id, post_id: Post.last.id)
+    @comment_vote = CommentVote.new(user_id: User.last.id,
+                                    comment_id: Comment.last.id, up: true)
   end
 
   test 'Valid Comment-vote accepted' do
@@ -18,8 +19,8 @@ class CommentVoteTest < ActiveSupport::TestCase
     assert @comment_vote.invalid?
   end
 
-  test 'Comment-vote without post rejected' do
-    @comment_vote.post_id = ' '
+  test 'Comment-vote without comment rejected' do
+    @comment_vote.comment_id = ' '
     assert @comment_vote.invalid?
   end
 
@@ -36,10 +37,10 @@ class CommentVoteTest < ActiveSupport::TestCase
     assert @comment_vote.invalid?
   end
 
-  test 'Comment-vote with non-existent post rejected' do
-    last_post = Post.last
-    last_id = last_post ? last_post.id : 0
-    @comment_vote.post_id = last_id + 1
+  test 'Comment-vote with non-existent comment rejected' do
+    last_comment = Comment.last
+    last_id = last_comment ? last_comment.id : 0
+    @comment_vote.comment_id = last_id + 1
     assert @comment_vote.invalid?
   end
 
