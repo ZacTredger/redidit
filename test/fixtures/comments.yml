@@ -4,12 +4,8 @@ one:
   user: 1
   post: 1
   text: Comment1
-  upvotes: 1
-  downvotes: 1
 
 two:
   user: 2
   post: 2
   text: Comment2
-  upvotes: 2
-  downvotes: 0

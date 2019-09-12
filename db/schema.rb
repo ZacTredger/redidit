@@ -10,15 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_11_154315) do
+ActiveRecord::Schema.define(version: 2019_09_12_092452) do
+
+  create_table "comment_votes", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "comment_id", null: false
+    t.boolean "up"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["comment_id"], name: "index_comment_votes_on_comment_id"
+    t.index ["user_id"], name: "index_comment_votes_on_user_id"
+  end
 
   create_table "comments", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "post_id", null: false
     t.integer "parent_id"
     t.text "text"
-    t.integer "upvotes"
-    t.integer "downvotes"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["parent_id"], name: "index_comments_on_parent_id"
@@ -26,13 +34,21 @@ ActiveRecord::Schema.define(version: 2019_09_11_154315) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "post_votes", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "post_id", null: false
+    t.boolean "up"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_post_votes_on_post_id"
+    t.index ["user_id"], name: "index_post_votes_on_user_id"
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.string "link"
     t.text "body"
     t.integer "user_id", null: false
-    t.integer "upvotes"
-    t.integer "downvotes"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["title"], name: "index_posts_on_title"
@@ -48,7 +64,11 @@ ActiveRecord::Schema.define(version: 2019_09_11_154315) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "comment_votes", "comments"
+  add_foreign_key "comment_votes", "users"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "post_votes", "posts"
+  add_foreign_key "post_votes", "users"
   add_foreign_key "posts", "users"
 end
