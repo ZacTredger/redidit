@@ -33,6 +33,9 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3', '~> 1.4'
+
+  # For randomly generating seeds
+  gem 'faker'
 end
 
 group :development do

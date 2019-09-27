@@ -75,6 +75,8 @@ GEM
     crass (1.0.4)
     erubi (1.8.0)
     execjs (2.7.0)
+    faker (2.4.0)
+      i18n (~> 1.6.0)
     ffi (1.11.1)
     formatador (0.2.5)
     globalid (0.4.2)
@@ -227,6 +229,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   coffee-rails
+  faker
   guard
   guard-minitest
   jbuilder (~> 2.7)
