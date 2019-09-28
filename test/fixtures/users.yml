@@ -1,11 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  username: Name1
+User_1:
+  username: User 1
   email: ex@mp.le
-  password_digest: $2a$12$fhG3ONuNX5igJRUMRUxc6u9ZosDqP1ORxxj9o09wAwHEaWLwtwoVq
+  password_digest: <%= User.digest('password') %>
 
-two:
-  username: name2
-  email: exam@ple.email
-  password_digest: $2a$12$fhG3ONuNX5igJRUMRUxc6u9ZosDqP1ORxxj9o09wAwHEaWLwtwoVq
+<% for n in 2..31 %>
+User_<%= n %>:
+  username: User <%= n %>
+  email: User-<%= n %>@example.com
+  password_digest: <%= User.digest('password') %>
+<% end %>
