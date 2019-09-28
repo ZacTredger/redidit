@@ -1,6 +1,8 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+/* Header */
+
 header {
   position: relative;
 }
@@ -19,4 +21,13 @@ header {
 a.nav {
   display: flex;
   align-items: center
+}
+
+/* Errors */
+
+#error-explanation {
+  color: red;
+  ul {
+    color: red
+  }
 }
