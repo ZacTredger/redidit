@@ -1,0 +1,22 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+header {
+  position: relative;
+}
+
+.logo {
+  display: inline-block;
+  margin: 0px 5px;
+  #alien {
+    height: 32px
+  }
+  #reddit-logo {
+    height: 18px
+  }
+}
+
+a.nav {
+  display: flex;
+  align-items: center
+}
