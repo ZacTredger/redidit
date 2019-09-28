@@ -1,5 +1,6 @@
 require 'test_helper'
 
+# Checks that users are able to sign up, but only if they submit valid infor
 class UsersSignupTest < ActionDispatch::IntegrationTest
   test 'Rejects invalid user info and re-renders signup with errors' do
     get new_user_path
@@ -24,7 +25,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                          password: 'password',
                                          password_confirmation: 'password' } }
     end
+    assert_redirected_to User.last
     follow_redirect!
-    assert_template 'users/show'
+    assert_select 'img.gravatar'
   end
 end

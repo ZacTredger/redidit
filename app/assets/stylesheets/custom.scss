@@ -2,7 +2,6 @@
 @import "bootstrap";
 
 /* Header */
-
 header {
   position: relative;
 }
@@ -24,10 +23,15 @@ a.nav {
 }
 
 /* Errors */
-
 #error-explanation {
   color: red;
   ul {
     color: red
   }
+}
+
+/* Gravatars */
+.gravatar {
+  float: left;
+  margin-right: 10px;
 }
