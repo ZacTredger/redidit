@@ -1,3 +1,4 @@
-<% size ||= 80 %>
-<%= gravatar_for user, size: size %>
-<%= user.username %>
+<li class="user">
+  <%= render partial: 'users/user_info', locals: { user: user,
+                                                   size: 50 } %>
+</li>
