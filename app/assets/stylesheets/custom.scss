@@ -45,7 +45,7 @@ textarea {
 }
 
 a {
-  color: $reddit-blue
+  color: $reddit-blue;
 }
 
 /* typography */
@@ -137,9 +137,16 @@ a.nav {
 .users {
   list-style: none;
   margin: 0;
+  a.username, p {
+    font-size: 18px;
+    line-height: 1em;
+    margin: 0
+  }
   li {
     overflow: auto;
     padding: 10px 0;
     border-bottom: 1px solid $gray-lighter;
+    display: flex;
+    align-items: center;
   }
 }

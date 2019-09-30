@@ -5,6 +5,7 @@
     <section class="user-info">
       <h1>
         <%= render partial: 'users/user_info', locals: { user: @user } %>
+        <%= @user.username %>
       </h1>
     </section>
   </div>

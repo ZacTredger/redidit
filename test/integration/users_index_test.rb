@@ -6,9 +6,10 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     assert_select 'li.user', minimum: 5 do |user_summaries|
       user_summaries.each do |user_summary|
         assert_select user_summary, 'img.gravatar', count: 1
-        assert_select user_summary, 'a', count: 1 do |user_links|
+        assert_select user_summary, 'a.user-link', count: 1 do |user_links|
           user = User.find_by(username: user_links.first.text)
           assert_select user_links, 'a[href=?]', user_path(user)
+          assert_select user_summary, 'a[href=?]', edit_user_path(user)
         end
       end
     end
