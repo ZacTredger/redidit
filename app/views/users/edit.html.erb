@@ -1,0 +1,10 @@
+<% provide :title, @user.username + ' settings' %>
+<% provide :submit_text, 'Update account' %>
+<% provide :url, user_path(@user) %>
+
+<h1>Account settings</h1>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= render 'users/form' %>
+  </div>
+</div>
