@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_secure_password
   validates :password, presence: true, length: { minimum: 7 }
   before_save { email.downcase! }
+  self.per_page = 20
 
   class << self
     # Returns the digest of a given string

@@ -8,3 +8,11 @@
     </ul>
   </div>
 </div>
+
+<div class="pagination">
+  <div class="page_info">
+    <%= page_entries_info @users %>
+  </div>
+  <%= will_paginate @users, renderer: BootstrapPagination::Rails,
+                            container: false %>
+</div>
