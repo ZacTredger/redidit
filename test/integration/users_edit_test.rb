@@ -1,5 +1,6 @@
 require 'test_helper'
 
+# Enable users to update their username, email or password
 class UsersEditTest < ActionDispatch::IntegrationTest
   setup do
     @user = users.first

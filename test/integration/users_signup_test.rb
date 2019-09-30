@@ -1,6 +1,6 @@
 require 'test_helper'
 
-# Checks that users are able to sign up, but only if they submit valid infor
+# Checks that users are able to sign up, but only if they submit valid info
 class UsersSignupTest < ActionDispatch::IntegrationTest
   test 'Rejects invalid user info and re-renders signup with errors' do
     get new_user_path
