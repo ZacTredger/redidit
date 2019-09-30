@@ -1,5 +1,6 @@
 require 'test_helper'
 
+# Test the user index page appears appropriately for users' authorization levels
 class UsersIndexTest < ActionDispatch::IntegrationTest
   test 'Shows info about each user and links to their page' do
     get users_path

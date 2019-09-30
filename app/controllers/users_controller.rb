@@ -17,6 +17,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     return (render :new) unless @user.save
 
+    flash[:success] = 'Account created'
     redirect_to @user
   end
 
@@ -28,6 +29,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     return (render :edit) unless @user&.update(user_params)
 
+    flash[:success] = 'Profile updated'
     redirect_to @user
   end
 

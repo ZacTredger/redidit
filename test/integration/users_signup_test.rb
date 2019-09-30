@@ -27,6 +27,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to User.last
     follow_redirect!
+    assert flash && flash[:success]
     assert_select 'img.gravatar'
   end
 end

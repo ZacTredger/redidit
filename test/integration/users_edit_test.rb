@@ -1,6 +1,6 @@
 require 'test_helper'
 
-# Enable users to update their username, email or password
+# Test users can update their usernames, emails and passwords
 class UsersEditTest < ActionDispatch::IntegrationTest
   setup do
     @user = users.first
@@ -29,6 +29,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
                                               email: new_email } }
     assert_redirected_to user_path(@user)
     follow_redirect!
+    assert flash && flash[:success]
     assert_equal @user.reload.username, new_name
     assert_equal @user.reload.email, new_email
   end
