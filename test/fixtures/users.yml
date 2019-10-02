@@ -8,6 +8,6 @@ User_1:
 <% for n in 2..31 %>
 User_<%= n %>:
   username: User <%= n %>
-  email: User-<%= n %>@example.com
+  email: user-<%= n %>@example.com
   password_digest: <%= User.digest('password') %>
 <% end %>

@@ -11,6 +11,9 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
           user = User.find_by(username: user_links.first.text)
           assert_select user_links, 'a[href=?]', user_path(user)
           assert_select user_summary, 'a[href=?]', edit_user_path(user)
+          assert_select user_summary,
+                        'a[href=?][data-method=?][data-confirm]',
+                        user_path(user), 'delete'
         end
       end
     end

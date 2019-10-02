@@ -3,7 +3,7 @@ require 'test_helper'
 # Test users can update their usernames, emails and passwords
 class UsersEditTest < ActionDispatch::IntegrationTest
   setup do
-    @user = users.first
+    @user = User.first
   end
 
   test 'Edit with invalid details rejected' do
@@ -39,5 +39,18 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert flash && flash[:success]
     assert_equal @user.reload.username, new_name
     assert_equal @user.reload.email, new_email
+  end
+
+  test 'deletion request confirms certainty, then destroys user' do
+    get edit_user_path(@user)
+    assert_select 'form[action=?][data-confirm]', user_path(@user) do |form|
+      assert_select form, 'input[name=?][value=?]', '_method', 'delete'
+    end
+    assert_difference 'User.count', -1 do
+      delete user_path(@user)
+    end
+    assert_redirected_to root_path
+    follow_redirect!
+    assert flash && flash[:success]
   end
 end

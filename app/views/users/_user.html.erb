@@ -3,4 +3,7 @@
   <%= link_to  user.username, user, class: 'user-link' %>  
   <p>&nbsp|&nbsp</p>
   <%= link_to  'edit', edit_user_path(user) %>
+  <p>&nbsp|&nbsp</p>
+  <%= link_to  'delete', user, method: :delete, 
+                               data: { confirm: 'Are you sure?' } %>
 </li>

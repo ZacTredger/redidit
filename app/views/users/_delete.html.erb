@@ -1,0 +1,4 @@
+<%= form_with(model: @user, data: { confirm: 'Are you sure?', local: true },
+                            method: 'delete') do |f| %>
+  <%= f.submit 'Delete account', class: 'btn btn-secondary btn-danger' %>
+<% end %>
