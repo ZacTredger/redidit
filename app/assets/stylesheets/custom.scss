@@ -14,6 +14,11 @@ $reddit-light-blue: #339eff;
   box-sizing: border-box;
 }
 
+%centre_flex {
+  display: flex;
+  align-items: center
+}
+
 /* miscellaneous */
 
 .debug_dump {
@@ -130,7 +135,12 @@ a.nav {
 /* Gravatars */
 .gravatar {
   float: left;
-  margin-right: 10px;
+  margin-right: 10px
+}
+
+div.edit-gravatar {
+  @extend %centre_flex;
+  margin-bottom: 10px
 }
 
 /* Users index */
@@ -146,7 +156,6 @@ a.nav {
     overflow: auto;
     padding: 10px 0;
     border-bottom: 1px solid $gray-lighter;
-    display: flex;
-    align-items: center;
+    @extend %centre_flex
   }
 }

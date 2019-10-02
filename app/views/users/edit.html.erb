@@ -5,6 +5,10 @@
 <h1>Account settings</h1>
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
+    <div class="edit-gravatar">
+      <%= gravatar_for @user, 50 %>
+      <%= link_to 'edit', @user.edit_gravatar_url, target: '_blank', rel: 'noopener' %>
+    </div>
     <%= render 'users/form' %>
   </div>
 </div>

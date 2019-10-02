@@ -28,4 +28,23 @@ class User < ApplicationRecord
       end
     end
   end
+
+  # Returns the URL to retrieve the user's Gravatar.
+  def edit_gravatar_url
+    GRAVATAR_ROOT_URL + "/#{gravatar_id}/edit"
+  end
+
+  # Returns the URL to retrieve the user's Gravatar.
+  def gravatar_url(size = 80)
+    GRAVATAR_ROOT_URL + "/avatar/#{gravatar_id}?s=#{size}"
+  end
+
+  private
+
+  GRAVATAR_ROOT_URL = 'https://secure.gravatar.com'.freeze
+
+  # Hash of user's email
+  def gravatar_id
+    Digest::MD5.hexdigest(email.downcase)
+  end
 end

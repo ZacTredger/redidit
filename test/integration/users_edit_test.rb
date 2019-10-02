@@ -11,6 +11,13 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_select 'form[action=?]', user_path(@user)
     assert_select 'input#user_username', value: @user.username
     assert_select 'input#user_email', value: @user.username
+    assert_select 'div.edit-gravatar', count: 1 do |grav_edit|
+      assert_select grav_edit, 'img.gravatar', count: 1
+      assert_select grav_edit, 'a' do |links|
+        assert_equal @user.edit_gravatar_url,
+                     links.first.attribute('href').value
+      end
+    end
     patch user_path(@user), params: { user: { username: '',
                                               email: '',
                                               password: '',
