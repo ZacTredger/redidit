@@ -7,6 +7,7 @@ $gray-medium-light: #eaeaea;
 $reddit-orange: #ff4500;
 $reddit-blue: #0079d3;
 $reddit-light-blue: #339eff;
+$reddit-grey: #878a8c;
 
 @mixin box_sizing {
   -moz-box-sizing: border-box;
@@ -103,6 +104,16 @@ input {
 /* Header */
 header {
   position: relative;
+}
+
+.dropdown-toggle {
+  fill: $reddit-grey;
+  .user-icon {
+    height: 24px
+  }
+  .carat {
+    height: 20px
+  }
 }
 
 .logo {

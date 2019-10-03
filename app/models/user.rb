@@ -29,6 +29,10 @@ class User < ApplicationRecord
     end
   end
 
+  def exists?
+    true
+  end
+
   # Returns the URL to retrieve the user's Gravatar.
   def edit_gravatar_url
     GRAVATAR_ROOT_URL + "/#{gravatar_id}/edit"

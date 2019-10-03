@@ -1,2 +1,11 @@
-<h1>Sessions#new</h1>
-<p>Find me in app/views/sessions/new.html.erb</p>
+<% provide :title, 'Log in' %>
+
+<h1>Log in</h1>
+<%= form_with url: sessions_path, scope: :user, local: true do |f| %>
+  <%= f.label :email %>
+  <%= f.email_field :email %>
+  <%= f.label :password %>
+  <%= f.password_field :password %>
+  <%= f.submit 'Log in', class: 'btn btn-primary' %>
+  <p>New to redidit? <%= link_to 'sign up here!', signup_path %></p>
+<% end %>
