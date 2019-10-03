@@ -13,13 +13,19 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_invalid_login_rejected(email: 'invalid_email')
   end
 
-  test 'valid login details accepted, redirecting user to homepage' do
+  test "accepts valid login & redirects user to user's page, then logs out" do
     assert_log_in
     assert_redirected_to user_path(@user)
     follow_redirect!
     assert_select 'a[href=?]', logout_path
     assert_select 'a[href=?]', login_path, false
     assert_select 'a[href=?]', signup_path, false
+    delete logout_path
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_select 'a[href=?]', logout_path, false
+    assert_select 'a[href=?]', login_path
+    assert_select 'a[href=?]', signup_path
   end
 
   private
