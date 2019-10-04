@@ -4,9 +4,10 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
-    if (@user = User.find_by(email: params.dig(:user, :email)))
-         &.authenticate(params.dig(:user, :password))
-      log_in @user
+    user_params = params[:user] || {}
+    if (@user = User.find_by(email: user_params[:email].downcase))
+       .authenticate(user_params[:password])
+      accept_log_in(user_params[:remember_me])
     else
       reject_log_in
     end

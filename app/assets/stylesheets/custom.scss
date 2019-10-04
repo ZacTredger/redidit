@@ -31,10 +31,6 @@ $reddit-grey: #878a8c;
 }
 
 /* universal */
-body {
-  padding-top: 60px;
-}
-
 section {
   overflow: auto;
 }
@@ -99,6 +95,20 @@ input {
 
 .btn-secondary {
   margin-top: 20px
+}
+
+.checkbox {
+  margin-top: -10px;
+  margin-bottom: 10px;
+  span {
+    margin-left: 20px;
+    font-weight: normal;
+  }
+}
+
+#user_remember_me {
+  width: auto;
+  margin-left: 0;
 }
 
 /* Header */
