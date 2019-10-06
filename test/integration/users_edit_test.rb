@@ -2,11 +2,6 @@ require 'test_helper'
 
 # Test users can update their usernames, emails and passwords
 class UsersEditTest < ActionDispatch::IntegrationTest
-  setup do
-    @user = User.first
-    @other_user = User.last
-  end
-
   test 'edit without login redirects then directs back' do
     get edit_user_path(@user)
     assert_redirected_to login_path

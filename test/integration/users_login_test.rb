@@ -1,10 +1,6 @@
 require 'test_helper'
 
 class UsersLoginTest < ActionDispatch::IntegrationTest
-  setup do
-    @user = users.first
-  end
-
   test 'login attempt with incorrect password is rejected with errors' do
     assert_invalid_login_rejected(password: '')
   end
