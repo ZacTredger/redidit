@@ -1,6 +1,9 @@
 # Controls actions on the user resource
 class UsersController < ApplicationController
-  helper UsersHelper
+  include UsersHelper
+  include ApplicationHelper
+  before_action :logged_in_user, only: %i[edit update destroy]
+  before_action :correct_user, only: %i[edit update destroy]
   def show
     @user = User.find(params[:id])
   end
@@ -34,20 +37,34 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    find_user_by_id
-    @user.destroy
+    TheUser.resolve_from_id(params[:id]).destroy
     flash[:success] = 'Account deleted'
     redirect_to root_path
   end
 
   private
 
-  def find_user_by_id
-    @user = User.find(params[:id])
-  end
-
   def user_params
     params.require(:user)
           .permit(:username, :email, :password, :password_confirmation)
+  end
+
+  # Before-filters
+
+  # Redirects non-logged-in users to login page, but puts current path in cookie
+  def logged_in_user
+    return if current_user.exists?
+
+    store_location
+    flash[:danger] = 'Please log in'
+    redirect_to login_path
+  end
+
+  # Allows access only if the current user and the user whose page it is match
+  def correct_user
+    return if current_user == TheUser.resolve_from_id(params[:id])
+
+    flash[:danger] = 'You were not authosized to access that page'
+    redirect_to root_path
   end
 end

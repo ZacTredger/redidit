@@ -1,6 +1,7 @@
 # Controls actions on the session resource
 class SessionsController < ApplicationController
   include SessionsHelper
+  include ApplicationHelper
   def new; end
 
   def create

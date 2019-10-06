@@ -4,9 +4,53 @@ require 'test_helper'
 class UsersEditTest < ActionDispatch::IntegrationTest
   setup do
     @user = User.first
+    @other_user = User.last
   end
 
-  test 'Edit with invalid details rejected' do
+  test 'edit without login redirects then directs back' do
+    get edit_user_path(@user)
+    assert_redirected_to login_path
+    follow_redirect!
+    assert flash && flash[:danger]
+    log_in
+    assert_redirected_to edit_user_path(@user)
+  end
+
+  test 'edit of different user not permitted' do
+    log_in(email: @other_user.email)
+    get edit_user_path(@user)
+    assert_redirected_to root_path
+    assert flash && flash[:danger]
+  end
+
+  test 'update without login not permitted; redirects to login' do
+    update_with_valid_details
+    assert_redirected_to login_path
+    assert flash && flash[:danger]
+  end
+
+  test 'update of different user not permitted' do
+    log_in(email: @other_user.email)
+    update_with_valid_details
+    assert_redirected_to root_path
+    assert flash && flash[:danger]
+  end
+
+  test 'deletion without login not permitted; redirects to login' do
+    assert_no_difference('User.count') { delete user_path(@user) }
+    assert_redirected_to login_path
+    assert flash && flash[:danger]
+  end
+
+  test 'deletion of different user not permitted' do
+    log_in(email: @other_user.email)
+    assert_no_difference('User.count') { delete user_path(@user) }
+    assert_redirected_to root_path
+    assert flash && flash[:danger]
+  end
+
+  test 'edit form is populated with current details' do
+    log_in
     get edit_user_path(@user)
     assert_select 'form[action=?]', user_path(@user)
     assert_select 'input#user_username', value: @user.username
@@ -18,6 +62,10 @@ class UsersEditTest < ActionDispatch::IntegrationTest
                      links.first.attribute('href').value
       end
     end
+  end
+
+  test 'update of self with invalid details rejected' do
+    log_in
     patch user_path(@user), params: { user: { username: '',
                                               email: '',
                                               password: '',
@@ -29,19 +77,18 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_equal @user.reload, @user
   end
 
-  test 'Edit with valid details updates user attributes & redirects' do
-    new_name = '1' + @user.username
-    new_email = '1' + @user.email
-    patch user_path(@user), params: { user: { username: new_name,
-                                              email: new_email } }
+  test 'update with valid details updates user attributes & redirects' do
+    log_in
+    update_with_valid_details
     assert_redirected_to user_path(@user)
     follow_redirect!
     assert flash && flash[:success]
-    assert_equal @user.reload.username, new_name
-    assert_equal @user.reload.email, new_email
+    assert_equal @user.reload.username, @new_name
+    assert_equal @user.reload.email, @new_email
   end
 
   test 'deletion request confirms certainty, then destroys user' do
+    log_in
     get edit_user_path(@user)
     assert_select 'form[action=?][data-confirm]', user_path(@user) do |form|
       assert_select form, 'input[name=?][value=?]', '_method', 'delete'
@@ -52,5 +99,14 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     follow_redirect!
     assert flash && flash[:success]
+  end
+
+  private
+
+  def update_with_valid_details(user = @user)
+    @new_name = '1' + user.username
+    @new_email = '1' + user.email
+    patch user_path(user), params: { user: { username: @new_name,
+                                             email: @new_email } }
   end
 end
