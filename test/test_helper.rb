@@ -16,7 +16,7 @@ module ActiveSupport
       @user = User.first
       @other_user = User.last
     end
-  
+
     def log_in(email: @user.email, password: 'password', remember_me: '0')
       post sessions_path, params: { user: { email: email,
                                             password: password,

@@ -18,10 +18,6 @@ module SessionsHelper
 
   private
 
-  def log_in(user = @user)
-    session[:user_id] = user.id
-  end
-
   # Generate random token; store it in permanent cookie, and its digest in DB
   def remember(user = @user)
     user.remember

@@ -21,10 +21,16 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_logged_out_header
   end
 
-  test 'login without remember-me request does not save cookie' do
+  test 'login with remember-me request saves cookie' do
     assert_log_in(remember_me: '1')
     assert cookies[:user_id]
     assert cookies[:remember_token]
+  end
+
+  test 'login without remember-me request does not save cookie' do
+    assert_log_in(remember_me: '0')
+    refute cookies[:user_id]
+    refute cookies[:remember_token]
   end
 
   test 'forces login on privileged page then redirects back' do
