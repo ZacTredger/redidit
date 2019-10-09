@@ -1,0 +1,13 @@
+<%= form_with(model: @post, local: true) do |f| %>
+  <%= render  partial: 'shared/error_messages', locals: { errors: @post.errors } %>
+  <%= f.label :title %>
+  <%= f.text_field :title, class: 'form-control' %>
+  
+  <%= f.label :link %>
+  <%= f.url_field :link, class: 'form-control' %>
+  
+  <%= f.label :body %>
+  <%= f.text_area :body, class: 'form-control' %>
+  
+  <%= f.submit yield(:submit_text), class: 'btn btn-primary' %>
+<% end %>

@@ -1,0 +1,4 @@
+<% title = @post.title %>
+<% link = @post.link %>
+<%= tag.h1(class: 'post-title') { link.blank? ? title : tag.a(title, href: link) } %>
+<%= tag.p(@post.body) if @post.body %>

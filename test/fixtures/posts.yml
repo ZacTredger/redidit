@@ -2,10 +2,12 @@
 
 one:
   title: MyText
+  link: https://www.duckduckgo.com
   body: MyText
   user: 1
 
 two:
   title: MyText
+  link: https://www.reddit.com
   body: MyText
   user: 2
