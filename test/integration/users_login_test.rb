@@ -37,8 +37,21 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     get edit_user_path(@user)
     assert_redirected_to login_path
     follow_redirect!
-    log_in
+    log_in_as
     assert_redirected_to edit_user_path(@user)
+  end
+
+  test 'remembered-me users remembered & logged in after session expiry' do
+    log_in_as(remember_me: '1')
+    old_remember_token = cookies[:remember_token]
+    # Remember-token not being stored as @user instance var!?!?
+    session.delete(:user_id)
+    get root_path
+    assert_logged_in_header
+    # Test that a session has been created
+    assert session[:user_id]
+    # Test that the remember digest & token have been refreshed
+    refute_equal old_remember_token, current_user.remember_token
   end
 
   private
@@ -52,7 +65,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   def assert_log_in(**keyword_args)
     get new_session_path
     assert_on_login_page
-    log_in(**keyword_args)
+    log_in_as(**keyword_args)
   end
 
   def assert_logged_in_header

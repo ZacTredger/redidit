@@ -54,9 +54,12 @@ module ApplicationHelper
 
   private
 
-  # Logs in the user unless they are a guest; returns the user
+  # Logs in user & refreshes cookies (unless user is a guest); returns user
   def log_in_possible_user(user)
-    log_in(user) if user.exists?
+    if user.exists?
+      log_in(user)
+      remember(user)
+    end
     user
   end
 end

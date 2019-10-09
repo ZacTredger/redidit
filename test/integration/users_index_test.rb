@@ -3,7 +3,7 @@ require 'test_helper'
 # Test the user index page appears appropriately for users' authorization levels
 class UsersIndexTest < ActionDispatch::IntegrationTest
   test "shows users' info & links to their page; shows edit/destroy for self" do
-    log_in
+    log_in_as
     get users_path
     assert_select 'li.user', minimum: 5 do |user_summaries|
       user_summaries.each do |user_summary|
