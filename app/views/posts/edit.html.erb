@@ -1,2 +1,10 @@
-<h1>Posts#edit</h1>
-<p>Find me in app/views/posts/edit.html.erb</p>
+<% provide :title, 'Edit post' %>
+<% provide :submit_text, 'Update post' %>
+<% provide :url, post_path(@post) %>
+
+<h1>Edit post</h1>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= render 'posts/form' %>
+  </div>
+</div>
