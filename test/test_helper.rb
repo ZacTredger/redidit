@@ -19,7 +19,8 @@ module ActiveSupport
       @other_user = User.last
     end
 
-    def log_in_as(email: @user.email, password: 'password', remember_me: '0')
+    def log_in_as(user = @user, email: user.email, password: 'password',
+                  remember_me: '0')
       post sessions_path, params: { user: { email: email,
                                             password: password,
                                             remember_me: remember_me } }
