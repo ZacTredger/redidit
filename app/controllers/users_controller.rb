@@ -48,14 +48,4 @@ class UsersController < ApplicationController
     params.require(:user)
           .permit(:username, :email, :password, :password_confirmation)
   end
-
-  # Before-filters
-
-  # Allows access only if the current user and the user whose page it is match
-  def correct_user
-    return if current_user == TheUser.resolve_from_id(params[:id])
-
-    flash[:danger] = 'You were not authosized to access that page'
-    redirect_to root_path
-  end
 end
