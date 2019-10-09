@@ -1,4 +1,4 @@
-<%= form_with(model: @post, local: true) do |f| %>
+<%= form_with(model: @post, url: yield(:url), local: true) do |f| %>
   <%= render  partial: 'shared/error_messages', locals: { errors: @post.errors } %>
   <%= f.label :title %>
   <%= f.text_field :title, class: 'form-control' %>
