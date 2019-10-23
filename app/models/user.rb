@@ -84,7 +84,7 @@ end
 
 # Active nothing for User object
 class GuestUser
-  ASSOCIATIONS = %i[posts comments post_votes comment_votes].freeze
+  ASSOCIATIONS = %i[posts comments].freeze
   FALSE_METHODS = %i[exists? authenticate].freeze
 
   def method_missing(method_name, *_args, &_block)
