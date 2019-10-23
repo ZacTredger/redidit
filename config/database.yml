@@ -22,4 +22,6 @@ test:
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  database: redidit_production
+  username: redidit
+  password: <%= ENV['REDIDIT_DATABASE_PASSWORD'] %>

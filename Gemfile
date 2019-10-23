@@ -27,6 +27,8 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
+# For randomly generating seeds
+gem 'faker'
 # Pagination
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
@@ -41,8 +43,6 @@ group :development, :test do
   gem 'pry-doc'
   gem 'pry-rails'
 
-  # For randomly generating seeds
-  gem 'faker'
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3', '~> 1.4'
 end
