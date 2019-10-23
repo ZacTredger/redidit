@@ -40,7 +40,6 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-doc'
   gem 'pry-rails'
-  gem 'm'
 
   # For randomly generating seeds
   gem 'faker'
@@ -52,6 +51,8 @@ group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'rb-readline'
+  gem 'reek'
+  gem 'rubocop'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
@@ -61,6 +62,8 @@ end
 group :test do
   gem 'guard'
   gem 'guard-minitest'
+  # Convert numbers to words
+  gem 'humanize'
   gem 'minitest'
   gem 'minitest-reporters'
   gem 'rails-controller-testing'
