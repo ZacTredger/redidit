@@ -31,6 +31,9 @@ gem 'jbuilder', '~> 2.7'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 
+# Get random records quickly (used during seeding)
+gem 'quick_random_records'
+
 group :development, :test do
   # Call 'binding.pry' anywhere in the code to stop execution & debug
   gem 'pry'
