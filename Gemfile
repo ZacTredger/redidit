@@ -38,6 +38,7 @@ group :development, :test do
   # Call 'binding.pry' anywhere in the code to stop execution & debug
   gem 'pry'
   gem 'pry-byebug'
+  gem 'pry-doc'
   gem 'pry-rails'
   gem 'm'
 

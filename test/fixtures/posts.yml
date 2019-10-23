@@ -4,10 +4,18 @@ one:
   title: MyText
   link: https://www.duckduckgo.com
   body: MyText
-  user: 1
+  user: User_1
 
 two:
   title: MyText
   link: https://www.reddit.com
   body: MyText
-  user: 2
+  user: User_2
+
+<% (3..52).each do |n| %>
+Post_<%= n.humanize.sub(' ', '-') %>:
+  title: User <%= n %>
+  body: user-<%= n %>@example.com
+  created_at: <%= rand(1..4000).hours.ago %>
+  user: User_1
+<% end %>
