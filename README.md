@@ -1,24 +1,37 @@
-# README
+# Redidit
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This Reddit pastiche was built as an excercise in developing with Ruby on Rails.
 
-Things you may want to cover:
+## [Visit the site](https://redidit-dfe-application.herokuapp.com/)
 
-* Ruby version
+## Installation
+First clone the repo and then install the needed gems (without production):
+```
+$ cd /path/to/repos
+$ git clone https://github.com/HerrHemd/microblogger.git microblogger
+$ cd microblogger
+$ bundle install --without production
+```
 
-* System dependencies
+Next, migrate the database:
+```
+$ rails db:migrate
+```
 
-* Configuration
+Finally, run the test suite to verify that everything is working correctly:
+```
+$ rails test
+```
 
-* Database creation
+If the test suite passes, you'll be ready to run the app in a local server:
+```
+$ rails server
+```
 
-* Database initialization
+## Roadmap
+- Subscribe-able subredidits that appear in feeds
+- Update feeds with AJAX
 
-* How to run the test suite
+## License
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+All source code in this app is under the MIT License. See [LICENSE.md](LICENSE.md) for details.
