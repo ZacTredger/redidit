@@ -1,6 +1,6 @@
 module Fake
   # Links random doge pic with dog-related meme as title. Limits comments
-  # because they're completely random and therefore boring
+  # because they aren't domain specific
   class Doggos < PostMaker
     def initialize
       @title = Faker::Creature::Dog.meme_phrase
@@ -10,7 +10,7 @@ module Fake
   end
 
   # Links random cat pic and constructs possessive cat title. Limits comments
-  # because they're completely random and therefore boring
+  # because they aren't domain specific
   class Cats < PostMaker
     def initialize
       cat = Faker::Creature::Cat
@@ -20,8 +20,8 @@ module Fake
     end
   end
 
-  # Generates quote and attributes to random philosipher with link to their wiki
-  # page. Limits comments because they're completely random and therefore boring
+  # Generates quote & attributes it to a random philosopher with link to their
+  # wiki page. Limits comments because they aren't domain specific
   class Philosophy < PostMaker
     def initialize
       philosophers = Faker::GreekPhilosophers
@@ -33,23 +33,23 @@ module Fake
   end
 
   # Title, body and comments are random strings of hipster words. Bodies are
-  # long. Limits comments because they're completely random and therefore boring
+  # long. Limits comments because they aren't domain specific
   class AskHipster < PostMaker
     def initialize
       hipster = Faker::Hipster
       @title = random_text(mod: hipster)
-      @body = random_text(mod: hipster)
+      @body = random_text(lexical_unit: :paragraph, mod: hipster)
       @commentate = -> { random_text(lexical_unit: :paragraph, mod: hipster) }
       @max_comments = 7
     end
   end
 
   # Uses lorem ipsum for title, body and comments. Limits comments because
-  # they're completely random and therefore boring
+  # they aren't domain specific
   class AskRediditInLatin < PostMaker
     def initialize
       @title = random_text(lexical_unit: :question)
-      @body = random_text
+      @body = random_text(lexical_unit: :paragraph)
       @commentate = -> { random_text(lexical_unit: :paragraph) }
       @op_reply = ->(_p) { 'Ego dissentio' }
       @max_comments = 7
@@ -118,10 +118,9 @@ module Fake
       demo = Faker::Demographic
       [
         demo.marital_status.downcase,
-        demo.race.sub(/ or .*/, '').downcase,
-        demo.demonym,
-        demo.sex.downcase,
-        'with ' + demo.educational_attainment.sub(/ or .*/, ''),
+        "#{demo.race.sub(/ or .*/, '').downcase} #{demo.sex.downcase}",
+        "with #{demo.educational_attainment.downcase.sub(/ or .*/, '')
+                    .sub('Grade', 'grades')}",
         signoff
       ].inject(demo.height(unit: :imperial)) { |spec, part| "#{spec}, #{part}" }
     end

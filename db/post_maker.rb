@@ -1,8 +1,13 @@
 # Interface for the Faker gem
 module Fake
-  # Returns a random creation datetime within the last 3 months
-  def self.creation_date
-    rand(1..2000).hours.ago
+  # Returns a random date after the creation dates of each record passed
+  def self.creation_date_after(*records)
+    Fake.creation_date(from: records.compact.map(&:created_at).max)
+  end
+
+  # Returns a random creation datetime within a range. Pass datetimes.
+  def self.creation_date(from: 3.months.ago, to: 1.hour.ago)
+    Time.at(rand(from.to_f..to.to_f))
   end
 
   # Create posts by calling `post_sub-name` (e.g. post_doggos)
@@ -10,7 +15,7 @@ module Fake
     class << self
       private
 
-      def method_missing(name, *args, &block)
+      def method_missing(name, *args)
         return super unless (poster = post_method_test(name))
 
         poster.new.make_post_and_comments
@@ -29,37 +34,38 @@ module Fake
       rescue NameError
         false
       end
-
-      def comment
-        RandomComment.generate
-      end
     end
 
     def make_post_and_comments
+      @strategy = ENV['RAILS_ENV'] == 'test' ? 3 : 1
       make_post
       make_comments
     end
 
     def make_post
-      @op = User.random_records(1).first
-      @post = @op.posts.create!(title: @title, link: @link, body: @body)
+      @op = User.random_records(1, strategy: strategy).first
+      created_at = Fake.creation_date_after(@op)
+      @post = @op.posts.create!(title: @title, link: @link, body: @body,
+                                created_at: created_at, updated_at: created_at)
     end
 
     def make_comments(min: 0, max: @max_comments || 15)
-      User.random_records(rand(min..max))
+      User.random_records(rand(min..max), strategy: strategy)
           .each_with_index
           .inject(CommentMemmo.new(@post)) do |comments, (user, i)|
         comments.add(user, text = call_text)
         next comments unless @op_reply && rand(i) < 2
 
-        comments.add(@op, @op_reply.call(text), parent_id: comments.last.id)
+        comments.add(@op, @op_reply.call(text), parent: comments.last)
       end
     end
 
     private
 
+    attr_reader :strategy
+
     def call_text
-      @commentate&.call || self.class.send(:comment)
+      @commentate&.call || RandomComment.generate
     end
 
     def random_text(lexical_unit: :sentence, mod: Faker::Lorem)
@@ -110,17 +116,19 @@ module Fake
     end
 
     # Creates a comment and pushes onto array
-    def add(user, text, parent_id: random_parent_id)
-      @array << @post.comments.create!(user: user, text: text,
-                                       parent_id: parent_id)
+    def add(user, text, parent: random_parent)
+      created_at = Fake.creation_date_after(user, @post, parent)
+      @array <<
+        @post.comments.create!(user: user, text: text, parent: parent,
+                               created_at: created_at, updated_at: created_at)
       self
     end
 
     private
 
-    # Takes the ID of a random comment already on the post
-    def random_parent_id
-      sample&.id if Faker::Boolean.boolean
+    # Selects a random comment already on the post
+    def random_parent
+      sample if Faker::Boolean.boolean
     end
   end
 end

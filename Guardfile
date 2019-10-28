@@ -44,11 +44,14 @@ guard :minitest, spring: 'bin/rails test', all_on_start: false do
     'test/integration/users_signup_test.rb'
   end
   watch('app/controllers/posts_controller.rb') do
-    'test/integration/post_new_test.rb'
+    'test/integration/posts_new_test.rb'
   end
   watch(%r{app/views/users/*}) do
     resource_tests('users') +
       ['test/integration/microposts_interface_test.rb']
+  end
+  watch(%r{db/(post_maker|redidits).rb}) do
+    resource_tests('posts') << 'test/lib'
   end
 end
 
