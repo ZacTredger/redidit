@@ -1,5 +1,10 @@
 # Interface for the Faker gem
 module Fake
+  # Returns a random creation datetime within the last 3 months
+  def self.creation_date
+    rand(1..2000).hours.ago
+  end
+
   # Create posts by calling `post_sub-name` (e.g. post_doggos)
   class PostMaker
     class << self

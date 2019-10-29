@@ -1,10 +1,14 @@
-%w[helpers.rb redidits.rb].each { |f| require_relative f }
+%w[post_maker.rb redidits.rb].each { |f| require_relative f }
+
+app_age = 3.months
+latest_signup = app_age.ago
 
 User.create!(
   username: 'Example name',
   email: 'example@railstutorial.org',
   password: 'password',
-  password_confirmation: 'password'
+  password_confirmation: 'password',
+  created_at: latest_signup
 )
 
 names = %w[
@@ -13,12 +17,19 @@ names = %w[
   bojack_horseman
 ].inject([]) { |arr, x| arr + Faker::Base.fetch_all(x + '.characters') }
 
-names.each_with_index do |name, n|
+creation_interval = app_age.seconds / names.count
+
+names.each do |name|
+  password = name.sub(' ', '_') + '_password'
+  created_at = Fake.creation_date(from: latest_signup + 1.second,
+                                  to: latest_signup + creation_interval)
   User.create!(
     username: name,
-    email: "example-#{n + 100}@railstutorial.org",
-    password: 'password',
-    password_confirmation: 'password'
+    email: Faker::Internet.unique.email,
+    password: password,
+    password_confirmation: password,
+    created_at: created_at,
+    updated_at: created_at
   )
 end
 
