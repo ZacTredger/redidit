@@ -7,10 +7,10 @@ class PostMakerTest < ActionDispatch::IntegrationTest
     post_cats: { title: 'Max, my Korn Ja', link: /.+cat$/ },
     post_philosophy: { title: 'Hippocrates - A few vices',
                        link: 'https://en.wikipedia.org/wiki/Hippocrates' },
-    post_ask_hipster: { title: /^Pabst /, body: /^Pinterest stumptown craft/,
+    post_ask_hipster: { title: /^Pabst/, body: /^Pinterest stumptown craft/,
                         com_reg: /^[A-Z].+\w+\./ },
     post_ask_redidit_in_latin:
-      { title: /Repellat.+\?/, body: /^Possimus in corporis/,
+      { title: /Repellat.*\?/, body: /^Possimus in corporis/,
         com_reg: /^[A-Z].+\w+\./, op_rep_reg: 'Ego dissentio' },
     post_hacker_help: { title: 'How do I synthesize the optical circuit?',
                         body: 'Sorry', com_reg: /^[A-Z].+\w+\!/,
