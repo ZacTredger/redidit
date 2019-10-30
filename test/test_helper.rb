@@ -8,15 +8,16 @@ Minitest::Reporters.use!
 module ActiveSupport
   class TestCase
     include ApplicationHelper
+    include FactoryBot::Syntax::Methods
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
-    # Setup all fixtures in test/fixtures/*.yml for all tests, alphabetically.
-    fixtures :all
-
     setup do
-      @user = User.first
-      @other_user = User.last
+      @user = create :user
+    end
+
+    def other_user
+      @other_user ||= create :user
     end
 
     def log_in_as(user = @user, email: user.email, password: 'password',

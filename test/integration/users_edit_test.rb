@@ -12,7 +12,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test 'edit of different user not permitted' do
-    log_in_as(email: @other_user.email)
+    log_in_as(email: other_user.email)
     get edit_user_path(@user)
     assert_redirected_to root_path
     assert flash && flash[:danger]
@@ -25,7 +25,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test 'update of different user not permitted' do
-    log_in_as(email: @other_user.email)
+    log_in_as(email: other_user.email)
     update_with_valid_details
     assert_redirected_to root_path
     assert flash && flash[:danger]
@@ -38,7 +38,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test 'deletion of different user not permitted' do
-    log_in_as(email: @other_user.email)
+    log_in_as(email: other_user.email)
     assert_no_difference('User.count') { delete user_path(@user) }
     assert_redirected_to root_path
     assert flash && flash[:danger]

@@ -7,7 +7,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get show' do
-    get post_path(posts.first)
+    get post_path(create(:post))
     assert_response :success
   end
 end

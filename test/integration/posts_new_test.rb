@@ -33,7 +33,7 @@ class PostNewTest < ActionDispatch::IntegrationTest
 
   test "can't edit post of another user" do
     post_successfully
-    log_in_as @other_user
+    log_in_as other_user
     get edit_post_path(@post)
     assert_response :redirect
     assert flash && flash[:danger]
@@ -60,7 +60,7 @@ class PostNewTest < ActionDispatch::IntegrationTest
 
   test "can't delete post of another user" do
     post_successfully
-    log_in_as @other_user
+    log_in_as other_user
     assert_no_difference('Post.count') { delete post_path(@post) }
     assert_response :redirect
     assert flash && flash[:danger]

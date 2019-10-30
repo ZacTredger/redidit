@@ -38,6 +38,7 @@ gem 'quick_random_records'
 
 group :development, :test do
   # Call 'binding.pry' anywhere in the code to stop execution & debug
+  gem 'factory_bot_rails'
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-doc'
