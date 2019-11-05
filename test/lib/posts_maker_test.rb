@@ -34,6 +34,10 @@ class PostMakerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  setup do
+    10.times { create :user }
+  end
+
   private
 
   attr_reader :post

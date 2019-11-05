@@ -1,15 +1,16 @@
-%w[post_maker redidits].each { |f| require_relative "../db/#{f}.rb" }
+require_relative '../db/post_maker.rb'
 
 FactoryBot.define do
   factory :user do
     sequence(:username) { |n| "Rediditor#{n}" }
     sequence(:email) { |n| "user#{n}@example.com" }
-    password_digest { User.digest('password') }
+    password { 'password' }
+    password_confirmation { 'password' }
     created_at { Fake.creation_date }
     updated_at { created_at }
     factory :user_with_posts do
       transient { posts_count { 5 } }
-      after_create do |user, evaluator|
+      after(:create) do |user, evaluator|
         create_list(:post, evaluator.posts_count, user: user)
       end
     end

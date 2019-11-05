@@ -34,21 +34,27 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   end
 
   test 'forces login on privileged page then redirects back' do
-    get edit_user_path(@user)
+    get edit_user_path(@user = create(:user))
     assert_redirected_to login_path
     follow_redirect!
-    log_in_as
+    log_in_as @user
     assert_redirected_to edit_user_path(@user)
+  end
+
+  test "login to different account doesn't redirect back to other's page" do
+    get edit_user_path(@other_user = create(:user))
+    assert_redirected_to login_path
+    follow_redirect!
+    log_in_as create(:user)
+    assert_redirect_with_bad_flash
   end
 
   test 'remembered-me users remembered & logged in after session expiry' do
     log_in_as(remember_me: '1')
     old_remember_token = cookies[:remember_token]
-    # Remember-token not being stored as @user instance var!?!?
     session.delete(:user_id)
     get root_path
     assert_logged_in_header
-    # Test that a session has been created
     assert session[:user_id]
     # Test that the remember digest & token have been refreshed
     refute_equal old_remember_token, current_user.remember_token

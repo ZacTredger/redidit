@@ -2,8 +2,7 @@ require 'test_helper'
 
 class PostTest < ActiveSupport::TestCase
   def setup
-    @post = Post.new(title: 'First!', body: 'Irrelevant',
-                     link: 'http://www.google.com', user_id: User.last.id)
+    @post = Post.new attributes_for(:post, user_id: create(:user).id)
   end
 
   test 'post accepted' do

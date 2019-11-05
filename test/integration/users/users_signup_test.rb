@@ -7,10 +7,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_select 'form[action="/signup"]'
     assert_select '#error-explanation', false
     assert_no_difference 'User.count' do
-      post users_path, params: { user: { username: 'Username',
-                                         email: 'ex@mple.com',
-                                         password: 'password',
-                                         password_confirmation: '' } }
+      post users_path,
+           params: { user: attributes_for(:user, password_confirmation: '') }
     end
     assert_select 'form[action="/signup"]'
     assert_select '#error-explanation'
@@ -20,10 +18,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   test "Accepts valid user info and redirects to new user's page" do
     get new_user_path
     assert_difference 'User.count', 1 do
-      post users_path, params: { user: { username: 'Username',
-                                         email: 'ex@mple.com',
-                                         password: 'password',
-                                         password_confirmation: 'password' } }
+      post users_path, params: { user: attributes_for(:user) }
     end
     assert_redirected_to User.last
     follow_redirect!

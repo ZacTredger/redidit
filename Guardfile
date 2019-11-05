@@ -44,12 +44,15 @@ guard :minitest, spring: 'bin/rails test', all_on_start: false do
   watch('app/controllers/posts_controller.rb') do
     'test/integration/posts_new_test.rb'
   end
-  watch(%r{app/views/users/*}) do
+  watch(%r{^app/views/users/*}) do
     resource_tests('users') +
       ['test/integration/microposts_interface_test.rb']
   end
-  watch(%r{db/(post_maker|redidits).rb}) do
+  watch(%r{^db/(post_maker|redidits)\.rb$}) do
     resource_tests('posts') << 'test/lib'
+  end
+  watch(%r{^test/integration/(.+)/\1_test\.rb$}) do |matches|
+    Dir["test/integration/#{matches[1]}"]
   end
 end
 
@@ -58,7 +61,8 @@ def integration_tests(resource = :all)
   if resource == :all
     Dir['test/integration/*']
   else
-    Dir["test/integration/#{resource}_*.rb"]
+    Dir["test/integration/#{resource}_*.rb"] +
+      Dir["test/integration/#{resource}/*"]
   end
 end
 

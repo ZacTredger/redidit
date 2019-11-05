@@ -2,11 +2,8 @@ require 'test_helper'
 
 class CommentTest < ActiveSupport::TestCase
   def setup
-    User.create(username: 'Name', email: 'ex@mp.le', password: 'Abcdefgh',
-                password_confirmation: 'Abcdefgh')
-    Post.create(title: 'Title', body: 'Body', user_id: User.last.id)
-    @comment = Comment.new(text: 'Comment', user_id: User.last.id,
-                           post_id: Post.last.id)
+    @comment = Comment.new(attributes_for(:comment, user_id: create(:user).id,
+                                                    post_id: create(:post).id))
   end
 
   test 'Comment without & with parent accepted' do
