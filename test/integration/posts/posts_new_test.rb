@@ -8,21 +8,11 @@ class PostsNewTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_path
   end
 
-  test 'invalid post return to form with errors highlighted' do
-    log_in_as create(:user)
-    get new_post_path
-    post_params.update(post_params) { '' }
-    assert_no_difference('Post.count') { make_post }
-    assert_select 'div#error-explanation', count: 1 do |errors|
-      assert_select errors, 'li', minimum: 2
-    end
-  end
-
   test 'can create post, which displays' do
     log_in_as create(:user)
     get new_post_path
-    assert_response :success
     assert_select 'form[action=?]', posts_path
+    assert_select '#error-explanation', false
     assert_difference('Post.count', 1) { make_post }
     assert_redirected_to post_path(@post = Post.last)
     follow_redirect!
@@ -34,5 +24,21 @@ class PostsNewTest < ActionDispatch::IntegrationTest
     @post.body.each_line do |line|
       assert_select('p', text: line.chomp)
     end
+  end
+
+  test 'post without title rejected with errors explained' do
+    rejects_invalid_post_and_explains_errors(:post_without_title, /[Tt]itle/)
+  end
+
+  test 'post with neither body nor link rejected with errors explained' do
+    rejects_invalid_post_and_explains_errors(:post_without_body_or_link,
+                                             /[Bb]ody.*[Ll]ink/)
+  end
+
+  def rejects_invalid_post_and_explains_errors(factory, error_text)
+    log_in_as create(:user)
+    get new_post_path
+    assert_no_difference('Post.count') { make_post(factory) }
+    assert_errors_explained(error_text)
   end
 end
