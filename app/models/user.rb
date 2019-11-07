@@ -4,7 +4,8 @@ class User < ApplicationRecord
   has_many :posts
   has_many :comments
   has_secure_password
-  validates :username, presence: true, length: { maximum: 255 }
+  validates :username, presence: true, format: { with: /\A[\w\-]+\z/ },
+            length: { maximum: 20 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@([a-z\d\-]+\.)+[a-z]+\z/i.freeze
   validates :email, presence: true, length: { maximum: 255 },
                     uniqueness: { case_sensitive: false },

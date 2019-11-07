@@ -12,7 +12,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     no_password_confirmation: { factory: :user_without_password_confirmation,
                                  error_text: /[Pp]assword [Cc]onfirmation/ },
     too_short_password: { factory: :user_with_short_password,
-                           error_text: /[Ppassword]/ }
+                           error_text: /[Ppassword]/ },
+    improper_username: { error_text: /[Uu]sername/, username: 'Has A Space' },
   }
   
   test "Accepts valid user info and redirects to new user's page" do

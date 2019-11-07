@@ -4,18 +4,24 @@ app_age = 3.months
 latest_signup = app_age.ago
 
 User.create!(
-  username: 'Example name',
+  username: 'Example_name',
   email: 'example@railstutorial.org',
   password: 'password',
   password_confirmation: 'password',
   created_at: latest_signup
 )
 
+def usernames_from(franchise)
+  usernames = Faker::Base.fetch_all(franchise + '.characters')
+  usernames.map! { |username| username.gsub("'", '').gsub(/[^\w\-]/, '-') }
+  usernames.select! { |name| name.length < 21 } || usernames
+end
+
 names = %w[
   hitchhikers_guide_to_the_galaxy
   princess_bride
   bojack_horseman
-].inject([]) { |arr, x| arr + Faker::Base.fetch_all(x + '.characters') }
+].inject([]) { |arr, franchise| arr + usernames_from(franchise) }
 
 creation_interval = app_age.seconds / names.count
 

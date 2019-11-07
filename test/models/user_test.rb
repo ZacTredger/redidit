@@ -9,12 +9,20 @@ class UserTest < ActiveSupport::TestCase
     assert @user.valid?
   end
 
-  test 'user without username is not valid' do
-    @user.username = ' '
+  test 'user without username is invalid' do
+    @user.username = ''
     assert @user.invalid?
   end
 
-  test 'user without email is not valid' do
+  test 'usernames containing disallowed characters are rejected' do
+    %W[\s \n + . ? ! &].each do |bad_char|
+      @user.username.insert(9, bad_char)
+      assert @user.invalid?, "Disallowed character `#{bad_char}` accepted in "\
+      "username `#{@user.username}`"
+    end
+  end
+
+  test 'user without email is invalid' do
     @user.email = ' '
     assert @user.invalid?
   end
