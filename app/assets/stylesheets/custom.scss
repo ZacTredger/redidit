@@ -7,7 +7,8 @@ $gray-medium-light: #eaeaea;
 $reddit-orange: #ff4500;
 $reddit-blue: #0079d3;
 $reddit-light-blue: #339eff;
-$reddit-grey: #878a8c;
+$action-grey: #878a8c;
+$metadata-grey: #7e7c7c;
 
 @mixin box_sizing {
   -moz-box-sizing: border-box;
@@ -15,9 +16,16 @@ $reddit-grey: #878a8c;
   box-sizing: border-box;
 }
 
-%centre_flex {
+%column_flex {
   display: flex;
+  flex-direction: column;
   align-items: center
+}
+
+%row_flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 /* miscellaneous */
@@ -51,29 +59,31 @@ a {
 }
 
 /* typography */
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, button, a {
   line-height: 1;
+  font-family: IBMPlexSans, Arial, sans-serif;
+  font-weight: 500;
 }
 
 h1 {
   font-size: 3em;
-  letter-spacing: -2px;
   margin-bottom: 30px;
   text-align: center;
 }
 
 h2 {
   font-size: 1.2em;
-  letter-spacing: -1px;
   margin-bottom: 30px;
   text-align: center;
   font-weight: normal;
   color: $gray-light;
 }
 
-p {
-  font-size: 1.1em;
-  line-height: 1.7em;
+p, div {
+  font-size: 14px;
+  padding: 0.8em 0 0.25em;
+  margin: 0;
+  font-family: Noto Sans, Arial, sans-serif;
 }
 
 /* forms */
@@ -117,7 +127,7 @@ header {
 }
 
 .dropdown-toggle {
-  fill: $reddit-grey;
+  fill: $action-grey;
   .user-icon {
     height: 24px
   }
@@ -164,8 +174,48 @@ a.nav {
 }
 
 div.edit-gravatar {
-  @extend %centre_flex;
+  @extend %column_flex;
   margin-bottom: 10px
+}
+
+/* Posts */
+.post-metadata {
+  color: $metadata-grey;
+  margin: 0px 8px 8px 8px;
+  i, a, span, button {
+    color: $metadata-grey;
+  }
+}
+
+h1.post-title {
+  font-size: 20px;
+  line-height: 24px;
+  text-align: start;
+  margin: 0px 8px;
+}
+
+div.post-body {
+  padding: 0 8px;
+  margin: 5.8px 1.5px;
+  max-width: 800px;
+}
+
+@mixin action {
+  color: $action-grey;
+  font-weight: 700;
+}
+
+.post-actions {
+  @extend %row_flex;
+  @include action;
+  padding: 4px 16px 0px 4px;
+  div {
+    margin-right: 4px;
+    padding: 4px;
+  }
+  i, a, span, button {
+    @include action
+  }
 }
 
 /* Users index */
@@ -175,12 +225,13 @@ div.edit-gravatar {
   a.user-link, p {
     font-size: 18px;
     line-height: 1em;
-    margin: 0
+    margin: 0;
+    padding: 0
   }
   li {
     overflow: auto;
     padding: 10px 0;
     border-bottom: 1px solid $gray-lighter;
-    @extend %centre_flex
+    @extend %row_flex
   }
 }

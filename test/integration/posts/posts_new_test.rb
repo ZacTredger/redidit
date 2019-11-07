@@ -28,4 +28,11 @@ class PostsNewTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_post_contents_displayed
   end
+
+  test 'multi-paragraph post body displays each para in own p-element' do
+    get post_path(@post = create(:post_with_multi_para_body))
+    @post.body.each_line do |line|
+      assert_select('p', text: line.chomp)
+    end
+  end
 end

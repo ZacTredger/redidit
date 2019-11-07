@@ -9,10 +9,12 @@ module PostsTestHelpers
     @post_params ||= attributes_for(:post)
   end
 
+  # Expects @post to have a 1 line body, & to have been created via the new post
+  # form in the last request
   def assert_post_contents_displayed
-    # post_params[:link] ? assert_linked_title : assert_title
+    post_params[:link] ? assert_linked_title : assert_title
     assert_select('p', text: post_params[:body])
-    # assert_select('a[href=?]', user_path(@post.user), text: @post.user.username)
+    assert_select('a[href=?]', user_path(@post.user), text: /#{@post.user.username}/)
   end
 
   private

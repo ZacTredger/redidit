@@ -38,6 +38,7 @@ FactoryBot.define do
       no_link
       no_body
     end
+    factory(:post_with_multi_para_body) { body { "Each\nin\nown\np-emelent" } }
     factory :post_with_comments do
       transient { comments_count { 5 } }
       after_create do |post, evaluator|
