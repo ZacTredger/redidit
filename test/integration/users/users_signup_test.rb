@@ -41,6 +41,12 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                         email: User.last.email)
   end
 
+  test 'rejects signup with username already taken' do
+    sign_up
+    rejects_invalid_signup_and_explains(:user, /[Ue]sername/,
+                                        username: User.last.username)
+  end
+
   test 'rejects signup with invalid emails and explains' do
     %w[ex@ample exam.ple example ex@am...ple @am.ple ex@mp.
        ex@am+p.le].each do |invalid|

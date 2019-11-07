@@ -46,7 +46,12 @@ class UserTest < ActiveSupport::TestCase
 
   test 'email already in db is rejected' do
     assert @user.save, 'User did not save to DB'
-    assert @user.dup.invalid?
+    refute @user.dup.update(username: 'different_name')
+  end
+
+  test 'username already in db is rejected' do
+    assert @user.save, 'User did not save to DB'
+    refute @user.dup.update(email: 'different@email.com')
   end
 
   test 'email is converted to lower case when saved' do
