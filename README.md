@@ -2,7 +2,7 @@
 
 This Reddit pastiche was built as an excercise in developing with Ruby on Rails.
 
-## [Visit the site](https://redidit-dfe-application.herokuapp.com/)
+## [Visit the site](https://redidit-zac-tredger.herokuapp.com/)
 
 ## Installation
 First clone the repo and then install the needed gems (without production):
