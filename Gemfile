@@ -43,6 +43,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-doc'
   gem 'pry-rails'
+  gem 'solargraph'
 
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3', '~> 1.4'
