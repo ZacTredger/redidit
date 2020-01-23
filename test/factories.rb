@@ -68,7 +68,7 @@ FactoryBot.define do
     factory :comment_with_children do
       transient { child_count { 5 } }
       after_create do |parent, evaluator|
-        create_list(:children, evaluator.cild_count, parent: parent)
+        create_list(:children, evaluator.child_count, parent: parent)
       end
     end
   end
