@@ -218,20 +218,30 @@ div.post-body {
   }
 }
 
-/* Users index */
-.users {
+/* Generic indices */
+%index {
   list-style: none;
   margin: 0;
-  a.user-link, p {
-    font-size: 18px;
-    line-height: 1em;
-    margin: 0;
-    padding: 0
-  }
   li {
     overflow: auto;
     padding: 10px 0;
     border-bottom: 1px solid $gray-lighter;
-    @extend %row_flex
+    @extend %row_flex;
+    a {
+      font-size: 18px;
+      line-height: 1em;
+      margin: 0;
+      padding: 0
+    }
   }
+}
+
+/* Users index */
+.users {
+  @extend %index;
+}
+
+/* Posts feed */
+.posts {
+  @extend %index
 }

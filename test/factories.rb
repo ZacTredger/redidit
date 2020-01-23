@@ -1,5 +1,6 @@
 require_relative '../db/post_maker.rb'
 
+# Users
 FactoryBot.define do
   factory :user do
     sequence(:username) { |n| "Rediditor#{n}" }
@@ -31,11 +32,12 @@ FactoryBot.define do
   end
 end
 
+# Posts
 FactoryBot.define do
   trait(:no_link) { link { '' } }
   trait(:no_body) { body { '' } }
   factory :post do
-    title { 'Title' }
+    sequence(:title) { |n| "Title #{n}" }
     user
     created_at { Fake.creation_date_after(user) }
     link { 'https://www.reddit.com' }
@@ -55,9 +57,10 @@ FactoryBot.define do
   end
 end
 
+# Comments
 FactoryBot.define do
   factory :comment, aliases: [:parent] do
-    text { 'Text' }
+    sequence(:text) { |n| "Comment #{n}" }
     user
     post
     created_at { Fake.creation_date_after(user, post) }

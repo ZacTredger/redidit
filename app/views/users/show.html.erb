@@ -1,12 +1,15 @@
 <% provide(:title, @user.username) %>
 
 <div class="row">
-  <div class="col-md-4">
-    <section class="user-info">
-      <h1>
-        <%= render partial: 'users/user_info', locals: { user: @user } %>
-        <%= @user.username %>
-      </h1>
-    </section>
+  <div class="col-md-9 ">
+    <ul class="users">
+      <% @user.posts.limit(20).each do |post| %>
+        <%= render partial: 'posts/post_info', locals: { post: post } %>
+      <% end %>
+    </ul>
   </div>
+  <aside class="col-md-3 user-info">
+    <%= render partial: 'users/user_info', locals: { user: @user, size: 50 } %>
+    <span><%= @user.username %></span>
+  </aside>
 </div>
