@@ -2,12 +2,10 @@
 
 <div class="row">
   <div class="col-md-9 ">
-    <ul class="users">
-      <% @user.posts.limit(20).each do |post| %>
-        <%= render partial: 'posts/post_info', locals: { post: post } %>
-      <% end %>
-    </ul>
+    <%= render partial: 'posts/feed',
+               locals: { posts: @user.posts.page(@page) }%>
   </div>
+  
   <aside class="col-md-3 user-info">
     <%= render partial: 'users/user_info', locals: { user: @user, size: 50 } %>
     <span><%= @user.username %></span>

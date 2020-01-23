@@ -1,0 +1,13 @@
+<ul class="posts">
+  <% posts.each do |post| %>
+    <%= render partial: 'posts/feed_post_info', locals: { post: post } %>
+  <% end %>
+</ul>
+
+<div class="pagination">
+  <div class="pagination_info">
+    <%= page_entries_info posts %>
+  </div>
+  <%= will_paginate posts, renderer: BootstrapPagination::Rails,
+                           container: false %>
+</div>

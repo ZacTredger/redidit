@@ -5,8 +5,8 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
     user = create(:user)
     username_regex = /#{user.username}/
     get user_path(user)
-    assert_select 'title', count: 1, text: @username_regex
-    assert_select 'aside.user-info', text: @username_regex
+    assert_select 'title', count: 1, text: username_regex
+    assert_select 'aside.user-info', text: username_regex
   end
 
   test 'each post in the feed belongs to the user' do
@@ -29,5 +29,11 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
         end
       end
     end
+  end
+
+  test 'feed paginates correctly' do
+    user = create(:user_with_posts, posts_count: 21)
+    get user_path(user)
+    assert_select 'li.post-info', count: 20
   end
 end

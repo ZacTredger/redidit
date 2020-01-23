@@ -5,6 +5,8 @@ guard :minitest, spring: 'bin/rails test', all_on_start: false do
   watch('test/test_helper.rb') { 'test' }
   watch('config/routes.rb') { interface_tests }
   watch(%r{app/views/layouts/*}) { interface_tests }
+  watch(%r{^app/views/posts/_feed*}) { post_feed_tests }
+  watch('app/models/post.rb') { post_feed_tests }
   watch(%r{^app/models/(.*?)\.rb$}) do |matches|
     "test/models/#{matches[1]}_test.rb"
   end
@@ -79,4 +81,9 @@ end
 # Returns all tests for the given resource.
 def resource_tests(resource)
   integration_tests(resource) << controller_test(resource)
+end
+
+# All tests of post feeds (on the homepage or user profiles)
+def post_feed_tests
+  %w[test/integration/users/users_profile_test.rb]
 end
