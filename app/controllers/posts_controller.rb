@@ -6,7 +6,10 @@ class PostsController < ApplicationController
   def index; end
 
   def show
-    return if @post
+    if @post
+      @comments = @post.comments.send(params[:order] || :recent)
+      return
+    end
 
     flash[:error] = 'Post not found'
     redirect_to root_path

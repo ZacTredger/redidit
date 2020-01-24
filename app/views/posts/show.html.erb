@@ -1,21 +1,32 @@
 <% title = @post.title %>
 <% link = @post.link %>
-<div class="post-metadata">
-  Posted by
-  <%= tag.a("u/#{@post.user.username}", href: user_path(@post.user)) %>
-  <%= tag.a(time_ago_in_words(@post.created_at) + ' ago', href: post_path(@post)) %>
-</div>
-<%= tag.h1(class: 'post-title') { link.blank? ? title : tag.a(title, href: link) } %>
-<% if @post.body %>
-  <div class="post-body">
-  <% @post.body.lines.map(&:chomp).each do |paragraph| %>
-    <%= tag.p(paragraph) %>
+
+<div class="post">
+  <div class="post-metadata">
+    Posted by
+    <%= tag.a("u/#{@post.user.username}", href: user_path(@post.user)) %>
+    <%= tag.a(time_ago_in_words(@post.created_at) + ' ago', href: post_path(@post)) %>
+  </div>
+  <%= tag.h1(class: 'post-title') { link.blank? ? title : tag.a(title, href: link) } %>
+  <% if @post.body %>
+    <div class="post-body">
+    <% @post.body.lines.map(&:chomp).each do |paragraph| %>
+      <%= tag.p(paragraph) %>
+    <% end %>
+    </div>
   <% end %>
-  </div>
-<% end %>
-<% if @post.user == current_user %>
-  <div class="post-actions">
-    <div><%= link_to 'Edit', edit_post_path(@post) %></div>
-    <div><%= link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Are you sure?' } %></div>
-  </div>
-<% end %>
+  <% if @post.user == current_user %>
+    <div class="post-actions">
+      <div><%= link_to 'Edit', edit_post_path(@post) %></div>
+      <div><%= link_to 'Delete', post_path(@post), method: :delete, data: { confirm: 'Are you sure?' } %></div>
+    </div>
+  <% end %>
+</div>
+
+<div class="comments">
+  <% @comments.each do |comment| %>
+    <div class="comment">
+      <p class="comment-text"> <%= comment.text %> </p>
+    </div>
+  <% end %>
+</div>

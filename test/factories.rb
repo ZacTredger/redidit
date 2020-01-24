@@ -17,7 +17,7 @@ FactoryBot.define do
     end
     factory :user_with_comments do
       transient { comments_count { 5 } }
-      after_create do |user, evaluator|
+      after(:create) do |user, evaluator|
         create_list(:comment, evaluator.comments_count, user: user)
       end
     end
@@ -47,7 +47,7 @@ FactoryBot.define do
     factory(:post_with_multi_para_body) { body { "Each\nin\nown\np-emelent" } }
     factory :post_with_comments do
       transient { comments_count { 5 } }
-      after_create do |post, evaluator|
+      after(:create) do |post, evaluator|
         create_list(:comment, evaluator.comments_count, post: post)
       end
     end
@@ -70,7 +70,7 @@ FactoryBot.define do
     end
     factory :comment_with_children do
       transient { child_count { 5 } }
-      after_create do |parent, evaluator|
+      after(:create) do |parent, evaluator|
         create_list(:children, evaluator.child_count, parent: parent)
       end
     end
