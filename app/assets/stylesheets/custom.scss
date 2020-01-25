@@ -210,6 +210,20 @@ div.post-body {
   margin: 0;
 }
 
+/* comments */
+
+div.comment {
+  div.comment-metadata {
+    @extend %metadata;
+    i, a, span, button {
+      font-size: 12px;
+    }
+  };
+  p.comment-text {
+    padding: 0 2px;
+  }
+}
+
 @mixin action {
   color: $action-grey;
   font-weight: 700;
