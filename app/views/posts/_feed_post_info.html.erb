@@ -1,3 +1,7 @@
-<li class="post-info">
-  <%= link_to post.title, post, class: 'post-link' %>
+<li class="post-info row">
+  <div class="col-md-11">
+    <%= render partial: 'shared/metadata',
+              locals: { resource: post, path: post_path(post) } %>
+    <%= link_to post.title, post, class: 'post-link' %>
+  </div>
 </li>

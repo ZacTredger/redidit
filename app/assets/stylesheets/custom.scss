@@ -178,26 +178,36 @@ div.edit-gravatar {
   margin-bottom: 10px
 }
 
-/* Posts */
-.post-metadata {
+/* Metadata */
+%metadata {
   color: $metadata-grey;
-  margin: 0px 8px 8px 8px;
+  margin-bottom: 0px 8px 8px 8px;
   i, a, span, button {
     color: $metadata-grey;
+    font-size: 14px;
   }
+}
+
+/* Posts */
+div.post {
+  padding: 0 8px;
+}
+
+div.post-metadata {
+  @extend %metadata;
 }
 
 h1.post-title {
   font-size: 20px;
   line-height: 24px;
   text-align: start;
-  margin: 0px 8px;
+  margin: 0;
 }
 
 div.post-body {
-  padding: 0 8px;
-  margin: 5.8px 1.5px;
+  margin: 6px 0;
   max-width: 800px;
+  margin: 0;
 }
 
 @mixin action {
@@ -227,21 +237,28 @@ div.post-body {
     padding: 10px 0;
     border-bottom: 1px solid $gray-lighter;
     @extend %row_flex;
-    a {
-      font-size: 18px;
-      line-height: 1em;
-      margin: 0;
-      padding: 0
-    }
   }
+}
+
+%index-link {
+  font-size: 18px;
+  line-height: 1em;
+  margin: 0;
+  padding: 0
 }
 
 /* Users index */
 .users {
   @extend %index;
+  a.user-link {
+    @extend %index-link
+  }
 }
 
 /* Posts feed */
 .posts {
-  @extend %index
+  @extend %index;
+  a.post-link {
+    @extend %index-link
+  }
 }

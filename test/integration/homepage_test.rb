@@ -6,11 +6,14 @@ class HomepageTest < ActionDispatch::IntegrationTest
     get(root_path)
     assert_select 'li.post-info', count: 20 do |posts_info|
       post_info = posts_info.first
-      assert_select post_info, 'a', count: 1 do |(post_link)|
-        most_recent_post = Post.recent.first
-        assert_equal most_recent_post.title, post_link.text
-        assert_equal post_path(most_recent_post), post_link['href']
+      latest_post = Post.recent.first
+      assert_select post_info, 'a.post-link', count: 1 do |(post_link)|
+        assert_equal latest_post.title, post_link.text
+        assert_equal post_path(latest_post), post_link['href']
       end
+      # Check post metadata
+      assert_select post_info, 'a[href=?]', user_path(o_p = latest_post.user),
+                    text: /#{o_p.username}/
     end
   end
 end

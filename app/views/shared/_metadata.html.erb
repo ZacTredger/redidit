@@ -1,0 +1,6 @@
+<% resource_type = resource.class.to_s.downcase %>
+<div class="<%= resource_type %>-metadata">
+  <%= 'Posted by' if resource_type == 'post' %>
+  <%= tag.a("u/#{resource.user.username}", href: user_path(resource.user)) %>
+  <%= tag.a(time_ago_in_words(resource.created_at) + ' ago', href: path) %>
+</div>

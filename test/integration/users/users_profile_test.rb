@@ -21,11 +21,14 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
     # Catch each list item containing preview info about a post
     assert_select 'li.post-info', count: 5 do |posts_info|
       posts_info.each do |post_info|
-        assert_select post_info, 'a', count: 1 do |(post_link)|
+        assert_select post_info, 'a.post-link', count: 1 do |(post_link)|
           # Remove each matched post from the list so they can't match with
           # multiple elements
           assert post = title_to_post.delete(post_link.text)
           assert_equal post_path(post), post_link['href']
+          # Check post metadata
+          assert_select post_info, 'a[href=?]', user_path(o_p = post.user),
+                        text: /#{o_p.username}/
         end
       end
     end
