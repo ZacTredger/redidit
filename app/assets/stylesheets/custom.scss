@@ -3,7 +3,7 @@
 
 /* mixins, variables, etc. */
 
-$gray-medium-light: #eaeaea;
+$grey-lightest: #eaeaea;
 $reddit-orange: #ff4500;
 $reddit-blue: #0079d3;
 $reddit-light-blue: #339eff;
@@ -211,6 +211,15 @@ div.post-body {
   margin: 6px 0;
   max-width: 800px;
   margin: 0;
+}
+
+div.members-only {
+  @extend %row_flex;
+  justify-content: space-between;
+  border: 1px solid $grey-lightest;
+  border-radius: 4px;
+  padding: 12px 8px;
+  margin: 16px 26px 0 26px;
 }
 
 /* comments */

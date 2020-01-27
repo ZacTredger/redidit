@@ -8,6 +8,7 @@ class PostsController < ApplicationController
   def show
     if @post
       @comments = @post.comments.send(params[:order] || :recent)
+      @comment = Comment.new
       return
     end
 

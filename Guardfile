@@ -42,6 +42,9 @@ guard :minitest, spring: 'bin/rails test', all_on_start: false do
   watch('app/views/static_pages/home.html.erb') do
     'test/integration/homepage_test.rb'
   end
+  watch(%r{^app/(controllers|views|helpers)/comments.*}) do
+    integration_tests('posts')
+  end
 end
 
 # The integration tests corresponding to the given resource, or all integration

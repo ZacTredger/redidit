@@ -22,6 +22,19 @@
   <% end %>
 </div>
 
+<div>
+  <% if logged_in? %>
+    <%= render partial: 'comments/form' %>
+  <% else %>
+  <div class="members-only">
+    <span>Log in or sign up to leave a comment</span>
+    <ul class="nav">
+      <%= render partial: 'shared/login_signup' %>
+    </ul>
+  </div>
+  <% end %>
+</div>
+
 <div class="comments">
   <% @comments.each do |comment| %>
     <div class="comment">
