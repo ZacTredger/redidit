@@ -35,4 +35,4 @@
 yarn-debug.log*
 .yarn-integrity
 .rubocop.yml
-commit_comments.txt
+commit_message.txt
