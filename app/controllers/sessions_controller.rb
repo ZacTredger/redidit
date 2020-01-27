@@ -10,6 +10,7 @@ class SessionsController < ApplicationController
        .authenticate(user_params[:password])
       accept_log_in(user_params[:remember_me])
     else
+      @user = User.new email: user_params[:email]
       reject_log_in
     end
   end

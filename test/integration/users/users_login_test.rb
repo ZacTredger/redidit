@@ -2,11 +2,21 @@ require 'test_helper'
 
 class UsersLoginTest < ActionDispatch::IntegrationTest
   test 'login attempt with incorrect password is rejected with errors' do
+    # Create user with username user1@example.com & try to sign in without pword
     assert_invalid_login_rejected(password: '')
+    # Check the user's progress is saved
+    assert_select 'input#user_email', count: 1 do |(email_input)|
+      assert_equal User.last.email, email_input[:value]
+    end
   end
 
   test 'login attempt with invalid email is rejected with errors' do
+    # Create user with username user1@example.com & try to sign in without pword
     assert_invalid_login_rejected(email: 'invalid_email')
+    # Check the user's progress is saved
+    assert_select 'input#user_email', count: 1 do |(email_input)|
+      assert_equal 'invalid_email', email_input[:value]
+    end
   end
 
   test "accepts valid login & redirects user to user's page, then logs out" do
