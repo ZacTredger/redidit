@@ -1,5 +1,7 @@
 <li>
-  <%= button_to "Log in", login_path, method: :get, class: 'btn btn-primary' %>
+  <%= button_to "Log in", login_path, method: :get, class: 'btn btn-primary',
+                params: { origin: request.env['ORIGINAL_FULLPATH'] } %>
+                                      
 </li>
 <li>
   <%= button_to  "Sign up", signup_path, method: :get, class: 'btn btn-success' %>

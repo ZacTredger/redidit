@@ -42,8 +42,8 @@ module ApplicationHelper
   end
 
   # Stores in the session the path currently requested for re-redirection later
-  def store_location
-    session[:forwarding_path] = request. original_fullpath if request.get?
+  def store_location(location = request.original_fullpath)
+    session[:forwarding_path] ||= location if request.get?
   end
 
   # Redirects to path stored in the session, or else to the root

@@ -2,7 +2,9 @@
 class SessionsController < ApplicationController
   include SessionsHelper
   include ApplicationHelper
-  def new; end
+  def new
+    store_location(params[:origin])
+  end
 
   def create
     user_params = params[:user] || {}

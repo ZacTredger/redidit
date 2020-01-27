@@ -31,6 +31,28 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_logged_out_header
   end
 
+  test 'clicking login header button from a page returns you once logged in' do
+    get(page_of_interest = user_path(create(:user)))
+    assert_select 'form[action=?]', login_path, count: 1 do |(login_form)|
+      assert_hidden_origin_input(login_form, page_of_interest)
+    end
+    get login_path, params: { origin: page_of_interest }
+    log_in_as
+    assert_redirected_to page_of_interest
+  end
+
+
+  test 'clicking login page button on post page return you once logged in' do
+    get(page_of_interest = post_path(create(:post)))
+    assert_select 'div.members-only form[action=?]', login_path,
+                  count: 1 do |(login_form)|
+      assert_hidden_origin_input(login_form, page_of_interest)
+    end
+    get login_path, params: { origin: page_of_interest }
+    log_in_as
+    assert_redirected_to page_of_interest
+  end
+
   test 'login with remember-me request saves cookie' do
     assert_log_in(remember_me: '1')
     assert cookies[:user_id]
@@ -87,6 +109,12 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   def assert_on_login_page
     assert_select 'form[action=?]', sessions_path, method: :post do |form|
       assert_select form, 'a[href=?]', signup_path
+    end
+  end
+
+  def assert_hidden_origin_input(login_form, origin)
+    assert_select login_form, 'input[type=hidden][name=origin]', count: 1 do |(input)|
+      assert_equal origin, input[:value]
     end
   end
 end
