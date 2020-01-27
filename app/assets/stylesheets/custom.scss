@@ -103,7 +103,7 @@ input {
   border-color: white;
 }
 
-.btn-secondary {
+.btn-under {
   margin-top: 20px
 }
 
@@ -147,9 +147,12 @@ header {
   }
 }
 
-a.nav {
-  display: flex;
-  align-items: center
+/* Navbar */
+ul.nav {
+  @extend %row_flex;
+  form {
+    padding-left: 8px;
+  }
 }
 
 /* Errors */

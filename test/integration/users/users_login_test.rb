@@ -74,22 +74,9 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     log_in_as(**keyword_args)
   end
 
-  def assert_logged_in_header
-    assert_select 'a[href=?]', logout_path
-    assert_select 'a[href=?]', login_path, false
-    assert_select 'a[href=?]', signup_path, false
-  end
-
   def assert_on_login_page
-    assert_select 'form[action=?]', sessions_path do |form|
+    assert_select 'form[action=?]', sessions_path, method: :post do |form|
       assert_select form, 'a[href=?]', signup_path
     end
-    assert_logged_out_header
-  end
-
-  def assert_logged_out_header
-    assert_select 'a[href=?]', logout_path, false
-    assert_select 'a[href=?]', login_path
-    assert_select 'a[href=?]', signup_path
   end
 end

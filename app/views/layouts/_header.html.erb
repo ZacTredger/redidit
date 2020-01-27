@@ -19,9 +19,8 @@
             </ul>
           </li>
         <% else %>
-          <li><%= link_to  "Sign up", signup_path %></li>
-          <li><%= link_to  "Log in", login_path %></li>
-          <% end %>
+          <%= render partial: 'shared/login_signup' %>
+        <% end %>
       </ul>
     </nav>
   </div>
