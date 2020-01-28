@@ -220,6 +220,10 @@ div.members-only {
   border-radius: 4px;
   padding: 12px 8px;
   margin: 16px 26px 0 26px;
+  span {
+    font-size: 16px;
+    color: $metadata-grey;
+  }
 }
 
 /* comments */
