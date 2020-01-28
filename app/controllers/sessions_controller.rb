@@ -2,6 +2,7 @@
 class SessionsController < ApplicationController
   include SessionsHelper
   include ApplicationHelper
+
   def new
     store_location(params[:origin])
   end
@@ -19,6 +20,6 @@ class SessionsController < ApplicationController
 
   def destroy
     session.delete(:user_id) if logged_in?
-    redirect_to root_path
+    redirect_to params[:origin] || root_path
   end
 end

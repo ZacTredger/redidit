@@ -47,7 +47,9 @@ module ActiveSupport
 
     # Confirms that the header contains sign-out but not login or signup links
     def assert_logged_in_header
-      assert_select 'a[href=?]', logout_path
+      assert_select 'a[data-method=delete]', count: 1 do |(logout_link)|
+        assert_match /#{logout_path}/, logout_link[:href]
+      end
       assert_select 'form[action=?]', login_path, false
       assert_select 'form[action=?]', signup_path, false
     end

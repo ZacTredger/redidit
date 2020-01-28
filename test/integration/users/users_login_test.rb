@@ -41,8 +41,16 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_redirected_to page_of_interest
   end
 
+  test 'clicking logout header button keeps you on the same page' do
+    log_in_as
+    get(page_of_interest = post_path(create(:post)))
+    assert_select 'header a[data-method=delete]', count: 1 do |(logout_link)|
+      delete logout_link[:href]
+    end
+    assert_redirected_to page_of_interest
+  end
 
-  test 'clicking login page button on post page return you once logged in' do
+  test 'clicking login page button on post page returns you once logged in' do
     get(page_of_interest = post_path(create(:post)))
     assert_select 'div.members-only form[action=?]', login_path,
                   count: 1 do |(login_form)|
@@ -81,7 +89,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_redirect_with_bad_flash
   end
 
-  test 'remembered-me users remembered & logged in after session expiry' do
+  test 'remember-me users remembered & logged in after session expiry' do
     log_in_as(remember_me: '1')
     old_remember_token = cookies[:remember_token]
     session.delete(:user_id)
