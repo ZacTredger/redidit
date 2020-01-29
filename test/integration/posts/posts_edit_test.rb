@@ -1,5 +1,5 @@
 require 'test_helper'
-require_relative 'posts_test.rb'
+require_relative 'posts_test_helper.rb'
 
 class PostsEditTest < ActionDispatch::IntegrationTest
   include PostsTestHelpers
