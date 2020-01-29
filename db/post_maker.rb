@@ -49,7 +49,7 @@ module Fake
                                 created_at: created_at, updated_at: created_at)
     end
 
-    def make_comments(min: 0, max: @max_comments || 15)
+    def make_comments(min: 0, max: @max_comments || 30)
       User.random_records(rand(min..max), strategy: strategy)
           .each_with_index
           .inject(CommentMemmo.new(@post)) do |comments, (user, i)|

@@ -42,4 +42,4 @@ end
 subs = %w[doggos cats philosophy hacker_help ask_hipster ask_redidit_in_latin
           trees technology dating]
 
-50.times { Fake::PostMaker.send('post_' + subs.sample) }
+75.times { Fake::PostMaker.send('post_' + subs.sample) }
