@@ -1,0 +1,2 @@
+<div><%= link_to 'Delete', send("#{resource.class.to_s.underscore}_path", resource),
+         method: :delete, data: { confirm: 'Are you sure?' } %></div>

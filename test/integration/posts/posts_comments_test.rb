@@ -65,6 +65,60 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
     assert_errors_explained(/([Bb]lank|[Ee]mpty)/)
   end
 
+  test 'users can delete their own childless comments' do
+    post = create(:post_with_comments, comments_count: 1)
+    comment = post.comments.first
+    log_in_as(comment.user)
+    get post_path(post)
+    assert_deletable_comment(comment)
+    assert_difference('Comment.count', -1) { delete comment_path(comment) }
+    assert_redirected_to post_path(post)
+    follow_redirect!
+    assert_select 'div.comment', false
+  end
+
+  test 'users can delete their own comments (with children)' do
+    parent_comment = create(:comment_with_children, child_count: 1)
+    child_comment = parent_comment.children.first
+    post = parent_comment.post
+    log_in_as(parent_comment.user)
+    get post_path(post)
+    assert_deletable_comment(parent_comment)
+    assert_no_difference('Comment.count') do
+      delete comment_path(parent_comment)
+    end
+    assert_redirected_to post_path(post)
+    follow_redirect!
+    assert flash && flash[:success]
+    assert_select 'div.comment', count: 2 do |comments|
+      assert_select comments, 'div.comment-metadata>span', count: 1 do |(user)|
+        assert_match /[Dd]eleted/, user.text
+      end
+    end
+    # Now delete the child and the parent should be deleted also
+    log_in_as(child_comment.user)
+    get post_path(post)
+    assert_deletable_comment(child_comment)
+    assert_difference('Comment.count', -2) do
+      delete comment_path(child_comment)
+    end
+    assert_redirected_to post_path(post)
+    follow_redirect!
+    assert flash && flash[:success]
+    assert_select 'div.comment', false
+  end
+
+  test 'users cannot delete eachothers comments' do
+    post = create(:post_with_comments, comments_count: 1)
+    comment = post.comments.first
+    log_in_as
+    get post_path(post)
+    assert_select 'div.comment-actions a[href=?]', comment_path(comment),
+                  method: :delete, count: 0
+    assert_no_difference('Comment.count') { delete comment_path(comment) }
+    assert_redirect_with_bad_flash
+  end
+
   private
 
   def commentless_post
@@ -74,5 +128,10 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
   def comment_attributes
     @comment_attributes ||=
       attributes_for(:comment).merge(post_id: commentless_post.id)
+  end
+
+  def assert_deletable_comment(comment)
+    assert_select 'div.comment-actions a[href=?]', comment_path(comment),
+                  method: :delete
   end
 end

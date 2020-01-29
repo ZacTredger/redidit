@@ -16,8 +16,7 @@
   <% if @post.user == current_user %>
     <div class="post-actions">
       <div><%= link_to 'Edit', edit_post_path(@post) %></div>
-      <div><%= link_to 'Delete', path, method: :delete,
-                       data: { confirm: 'Are you sure?' } %></div>
+      <%= render partial: 'shared/actions', locals: { resource: @post } %>
     </div>
   <% end %>
 </div>
@@ -40,7 +39,12 @@
     <div class="comment">
       <%= render partial: 'shared/metadata',
                  locals: { resource: comment, path: path } %>
-      <p class="comment-text"><%= comment.text %></p>
+      <p class="comment-text"><%= comment.text || 'deleted' %></p>
+    </div>
+    <div class="comment-actions">
+      <% if current_user == comment.user %>
+        <%= render partial: 'shared/actions', locals: { resource: comment } %>
+      <% end %>
     </div>
   <% end %>
 </div>

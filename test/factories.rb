@@ -59,7 +59,7 @@ end
 
 # Comments
 FactoryBot.define do
-  factory :comment, aliases: [:parent] do
+  factory :comment, aliases: %i[parent child] do
     sequence(:text) { |n| "Comment #{n}" }
     user
     post
@@ -71,7 +71,7 @@ FactoryBot.define do
     factory :comment_with_children do
       transient { child_count { 5 } }
       after(:create) do |parent, evaluator|
-        create_list(:children, evaluator.child_count, parent: parent)
+        create_list(:child, evaluator.child_count, parent: parent, post: parent.post)
       end
     end
   end

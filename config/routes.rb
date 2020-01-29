@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
-  resources :users
+  resources :users, :posts
   resources :sessions, only: %i[new create destroy]
-  resources :posts
-  resources :comments, only: %i[create]
+  resources :comments, only: %i[create destroy]
   get '/home', to: 'static_pages#home'
   get '/about', to: 'static_pages#about'
   get '/contact', to: 'static_pages#contact'
