@@ -1,10 +1,10 @@
 <p>Comment as <%= link_to current_user.username, user_path(current_user) %></p>
 
-<%= form_with(model: @comment, local: true, class: 'comment-form') do |f| %>
+<%= form_with(model: [@post, @comment], local: true,
+              class: 'comment-form') do |f| %>
   <%= render partial: 'shared/error_messages', locals: { errors: @comment.errors } %>
-  <%= hidden_field_tag('comment[post_id]', @post.id) %>
 
-  <%= f.text_field :text, class: 'form-control' %>
+  <%= f.text_area :text, class: 'form-control' %>
 
   <%= f.submit 'Comment', class: 'btn btn-primary'%>
 <% end %>

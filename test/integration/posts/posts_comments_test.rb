@@ -22,13 +22,11 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
   test 'cannot comment unless logged in' do
     get post_path(commentless_post)
     # Comment form NOT displayed
-    assert_select 'form[action=?]', comments_path, false
+    refute_comment_form_rendered
     # Login and signup links displayed
     assert_select 'form[action=?]', login_path, method: :get
     assert_select 'form[action=?]', signup_path, method: :get
-    assert_no_difference 'Comment.count' do
-      post comments_path, params: { comment: comment_attributes }
-    end
+    assert_no_difference('Comment.count') { create_comment }
     assert_redirected_to login_path
   end
 
@@ -39,12 +37,10 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
     assert_select 'form[action=?]', login_path, false
     assert_select 'form[action=?]', signup_path, false
     # Comment form displayed
-    assert_select 'form[action=?]', comments_path
+    assert_comment_form_rendered
     assert_select '#error-explanation', false
     assert_difference('Comment.count', 1) do
-      assert_difference('Post.last.comments.count', 1) do
-        post comments_path, params: { comment: comment_attributes }
-      end
+      assert_difference('Post.last.comments.count', 1) { create_comment }
     end
     assert_select '#error-explanation', false
     assert_select 'div.comment' do |(cmnt_obj)|
@@ -58,10 +54,10 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
   test 'cannot create blank comment' do
     log_in_as create(:user)
     get post_path(commentless_post)
+    # Comment form displayed
+    assert_comment_form_rendered
     comment_attributes[:text] = ' '
-    assert_no_difference 'Comment.count' do
-      post comments_path, params: { comment: comment_attributes }
-    end
+    assert_no_difference('Comment.count') { create_comment }
     assert_errors_explained(/([Bb]lank|[Ee]mpty)/)
   end
 
@@ -126,12 +122,25 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
   end
 
   def comment_attributes
-    @comment_attributes ||=
-      attributes_for(:comment).merge(post_id: commentless_post.id)
+    @comment_attributes ||= attributes_for(:comment)
+  end
+
+  def create_comment
+    post post_comments_path(commentless_post), params:
+          { comment: comment_attributes, post_id: commentless_post.id }
   end
 
   def assert_deletable_comment(comment)
     assert_select 'div.comment-actions a[href=?]', comment_path(comment),
                   method: :delete
+  end
+
+  def assert_comment_form_rendered(count: 1)
+    assert_select 'form[action=?]', post_comments_path(commentless_post),
+                  count: count
+  end
+
+  def refute_comment_form_rendered
+    assert_comment_form_rendered(count: 0)
   end
 end
