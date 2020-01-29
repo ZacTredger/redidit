@@ -13,7 +13,7 @@
 ActiveRecord::Schema.define(version: 2020_01_24_113437) do
 
   create_table "comments", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.integer "post_id", null: false
     t.integer "parent_id"
     t.text "text"
