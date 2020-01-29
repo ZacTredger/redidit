@@ -83,9 +83,11 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
     assert_no_difference('Comment.count') do
       delete comment_path(parent_comment)
     end
+    assert_nil parent_comment.reload.user_id, 'Comment has not been redacted; '\
+                                              'user_id not nil:'
     assert_redirected_to post_path(post)
     follow_redirect!
-    assert flash && flash[:success]
+    assert flash && flash[:info]
     assert_select 'div.comment', count: 2 do |comments|
       assert_select comments, 'div.comment-metadata>span', count: 1 do |(user)|
         assert_match /[Dd]eleted/, user.text

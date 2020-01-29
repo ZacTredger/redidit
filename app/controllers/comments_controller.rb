@@ -12,8 +12,14 @@ class CommentsController < ApplicationController
 
   def destroy
     post_id = comment.post_id
-    comment.safe_delete
-    flash[:success] = 'Comment deleted'
+    if comment.destroy
+      flash[:success] = 'Comment deleted'
+    else
+      comment.redact
+      flash[:info] = "Deleted your comment's content and your connection to"\
+                       ' it, but it will still appear (as deleted) because it'\
+                       ' has children.'
+    end
     redirect_to post_path(post_id)
   end
 
