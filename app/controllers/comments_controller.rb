@@ -6,7 +6,7 @@ class CommentsController < ApplicationController
   def create
     @comment = @post.comments.build(comment_params)
     @comment = Comment.new if @comment.save
-    @comments = @post.comments.send(params[:order] || :recent)
+    @comments = @post.comments.includes(:user).send(params[:order] || :recent)
     render 'posts/show'
   end
 

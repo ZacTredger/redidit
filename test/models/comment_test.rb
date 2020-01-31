@@ -47,4 +47,25 @@ class CommentTest < ActiveSupport::TestCase
     @comment.post_id = last_id + 1
     assert @comment.invalid?
   end
+
+  test 'Recent comments are ordered correctly' do
+    # Create a top level comment, a parent with 2 children, and a grandparent
+    # with 2 children and 4 grandchildren (2 per parent)
+    post = create(:post_with_threaded_comments, threads_each_count: 1)
+    assert_equal 3, post.comments.where(parent_id: nil).count,
+                 'Expected three top-level comments. Maybe check factories?'
+    post.comments.recent.each_with_object([]) do |comment, ancestry|
+      # If the comment has siblings...
+      if (parent = comment.parent) && parent != ancestry.last
+        # Check the comment's parent has already been seen
+        assert parent_gen = ancestry.index(parent)
+        generation = parent_gen + 1
+        # Check the comment is older than its (higher) sibling
+        assert_operator comment.created_at, :<=, ancestry[generation].created_at
+        # Remove comment's sibling (and sibling's descendents) from ancestry
+        ancestry.slice!(generation..)
+      end
+      ancestry << comment
+    end
+  end
 end

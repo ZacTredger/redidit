@@ -228,15 +228,39 @@ div.members-only {
 
 /* comments */
 
-div.comment {
-  div.comment-metadata {
-    @extend %metadata;
-    i, a, span, button {
-      font-size: 12px;
+div.comment-row {
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+  div.reverse-thread-area {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: stretch;
+    padding: 0;
+    div.threadline-space {
+      display: flex;
+      align-items: stretch;
+      width: 16px;
+      flex-shrink: 0;
+      padding: 0;
+      div.threadline {
+        width: 8px;
+        flex-shrink: 0;
+        padding: 0;
+        border-right: 2px solid $grey-lightest;
+      }
     }
-  };
-  p.comment-text {
-    padding: 0 2px;
+  }
+  div.comment {
+    div.comment-metadata {
+      @extend %metadata;
+      i, a, span, button {
+        font-size: 12px;
+      }
+    };
+    p.comment-text {
+      padding: 0 2px;
+    }
   }
 }
 

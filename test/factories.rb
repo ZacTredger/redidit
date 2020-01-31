@@ -51,6 +51,16 @@ FactoryBot.define do
         create_list(:comment, evaluator.comments_count, post: post)
       end
     end
+    factory :post_with_threaded_comments do
+      transient { threads_each_count { 1 } }
+      after(:create) do |post, evaluator|
+        create_list(:comment, evaluator.threads_each_count, post: post)
+        create_list(:comment_with_children, evaluator.threads_each_count,
+                    post: post)
+        create_list(:comment_with_grandchildren, evaluator.threads_each_count,
+                    post: post)
+      end
+    end
     # Invalid posts
     factory(:post_without_body_or_link) { no_link; no_body }
     factory(:post_without_title) { title { '' } }
@@ -59,19 +69,27 @@ end
 
 # Comments
 FactoryBot.define do
-  factory :comment, aliases: %i[parent child] do
+  factory :comment do
     sequence(:text) { |n| "Comment #{n}" }
     user
     post
     created_at { Fake.creation_date_after(user, post) }
-    factory :comment_with_parent do
+    factory :comment_with_parent, aliases: [:child] do
       parent
       created_at { Fake.creation_date_after(user, post, parent) }
     end
-    factory :comment_with_children do
-      transient { child_count { 5 } }
+    factory :comment_with_children, aliases: [:parent] do
+      transient { child_count { 2 } }
       after(:create) do |parent, evaluator|
-        create_list(:child, evaluator.child_count, parent: parent, post: parent.post)
+        create_list(:child, evaluator.child_count, parent: parent,
+                                                   post: parent.post)
+      end
+    end
+    factory :comment_with_grandchildren, aliases: [:grandparent] do
+      transient { child_count { 2 } }
+      after(:create) do |grandparent, evaluator|
+        create_list(:parent, evaluator.child_count, parent: grandparent,
+                                                    post: grandparent.post)
       end
     end
   end

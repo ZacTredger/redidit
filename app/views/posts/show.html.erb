@@ -36,14 +36,26 @@
 
 <div class="comments">
   <% @comments.each do |comment| %>
-    <div class="comment">
-      <%= render partial: 'shared/metadata',
-                 locals: { resource: comment, path: path } %>
-      <p class="comment-text"><%= comment.text || 'deleted' %></p>
-    </div>
-    <div class="comment-actions">
+    <div class="comment-row">
+      <% if (level = (ancestor = comment).level) > 0 %>
+        <div class="reverse-thread-area">
+          <% level.times do %>
+            <% ancestor = ancestor.parent %>
+            <div class="with-comment-<%= ancestor.id %> threadline-space">
+              <div class="threadline"></div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+      <div class="comment with-comment-<%= comment.id %>" id="<%= comment.id %>">
+        <%= render partial: 'shared/metadata',
+                  locals: { resource: comment, path: path } %>
+        <p class="comment-text"><%= comment.text || 'deleted' %></p>
+      </div>
       <% if current_user == comment.user %>
-        <%= render partial: 'shared/actions', locals: { resource: comment } %>
+        <div class="comment-actions">
+          <%= render partial: 'shared/actions', locals: { resource: comment } %>
+        </div>
       <% end %>
     </div>
   <% end %>

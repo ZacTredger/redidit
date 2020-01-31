@@ -7,7 +7,7 @@ class PostsController < ApplicationController
 
   def show
     if @post
-      @comments = @post.comments.send(params[:order] || :recent)
+      @comments = @post.comments.includes(:user).send(params[:order] || :recent)
       @comment = @post.comments.build
       return
     end
