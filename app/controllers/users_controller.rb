@@ -6,7 +6,8 @@ class UsersController < ApplicationController
   before_action :correct_user, only: %i[edit update destroy]
   def show
     @user = User.find(params[:id])
-    @posts = @user.posts.send(params[:order] || :recent).page(params[:page])
+    order = params[:order] || :recent
+    @posts = @user.posts.send(order).page(params[:page])
   end
 
   def index

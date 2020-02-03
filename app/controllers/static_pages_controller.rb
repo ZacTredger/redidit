@@ -1,6 +1,7 @@
 class StaticPagesController < ApplicationController
   def home
-    @posts = Post.send(params[:order] || :recent).page(params[:page])
+    order = params[:order] || :recent
+    @posts = Post.includes(:user).send(order).page(params[:page])
   end
 
   def about

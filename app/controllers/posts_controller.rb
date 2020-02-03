@@ -1,9 +1,8 @@
 class PostsController < ApplicationController
   include ApplicationHelper
-  before_action :logged_in_user, except: %i[index show]
+  before_action :logged_in_user, except: :show
   before_action :set_post_var, only: %i[show edit update destroy]
   before_action :correct_user, only: %i[edit update destroy]
-  def index; end
 
   def show
     if @post
@@ -56,7 +55,7 @@ class PostsController < ApplicationController
   # Before-filters
   # Sets the instance var @post, which is used to test whether user is correct
   def set_post_var
-    @post = Post.find_by(id: params[:id])
+    @post = Post.includes(:user).find_by(id: params[:id])
   end
 
   # Tests whether the user trying to interact with the post is its author

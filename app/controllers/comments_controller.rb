@@ -6,7 +6,8 @@ class CommentsController < ApplicationController
   def create
     @comment = @post.comments.build(comment_params)
     @comment = Comment.new if @comment.save
-    @comments = @post.comments.includes(:user).send(params[:order] || :recent)
+    order = params[:order] || :recent
+    @comments = @post.comments.includes(:user).send(order)
     render 'posts/show'
   end
 
@@ -36,7 +37,7 @@ class CommentsController < ApplicationController
 
   # Before filters
   def set_post
-    return if (@post = Post.find_by(id: params[:post_id]))
+    return if (@post = Post.includes(:user).find_by(id: params[:post_id]))
 
     flash[:error] = 'Post not found'
     redirect_to root_path

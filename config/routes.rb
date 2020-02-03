@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :users
   resources :sessions, only: %i[new create destroy]
-  resources :posts do
+  resources :posts, except: :index do
     resources :comments, only: %i[create destroy], shallow: true
   end
   get '/home', to: 'static_pages#home'
