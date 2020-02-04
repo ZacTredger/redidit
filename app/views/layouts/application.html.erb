@@ -5,8 +5,11 @@
     <%= render  'layouts/rails_defaults' %>
     <%= render  'layouts/shim' %>
   </head>
-
+<% if (body_class = yield(:body_class)) %>
+  <body class="<%= body_class %>">
+<% else %>
   <body>
+<% end %>
     <%= render  'layouts/header' %>
     <% flash.each do |message_type, message| %>
       <%= tag.div message, class: "alert alert-#{message_type}" %>
