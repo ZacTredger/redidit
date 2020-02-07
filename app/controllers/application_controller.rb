@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::Base
   include ApplicationHelper
   protect_from_forgery with: :exception
+  rescue_from ActionController::InvalidAuthenticityToken do
+    forget current_user
+    log_out
+  end
 
   # Generic before-filters
   # Redirects non-logged-in users to login page, but puts current path in cookie

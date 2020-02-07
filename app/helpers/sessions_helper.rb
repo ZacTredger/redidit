@@ -25,11 +25,4 @@ module SessionsHelper
     permanent_cookies.signed[:user_id] = user.id
     permanent_cookies[:remember_token] = user.remember_token
   end
-
-  # Remove remember_token so user will have to log on
-  def forget(user = @user)
-    user.forget
-    cookies.delete(:user_id)
-    cookies.delete(:remember_token)
-  end
 end

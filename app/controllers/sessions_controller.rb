@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session.delete(:user_id) if logged_in?
+    log_out if logged_in?
     redirect_to params[:origin] || root_path
   end
 end

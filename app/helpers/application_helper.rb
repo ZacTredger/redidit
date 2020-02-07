@@ -23,6 +23,11 @@ module ApplicationHelper
     session[:user_id] = user.id
   end
 
+  # Removes user's ID from session
+  def log_out
+    session.delete(:user_id)
+  end
+
   # Returns the current user and sets the instance corresponding variable
   def current_user
     @current_user ||=
@@ -61,5 +66,12 @@ module ApplicationHelper
       remember(user)
     end
     user
+  end
+
+  # Remove remember_token so user will have to log on
+  def forget(user = @user)
+    user.forget
+    cookies.delete(:user_id)
+    cookies.delete(:remember_token)
   end
 end
