@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
   resources :users
   resources :sessions, only: %i[new create destroy]
-  resources :posts, except: :index do
-    resources :comments, only: %i[create destroy], shallow: true
+  concern :votable do
+    resources :votes, only: %i[create destroy update], shallow: true
+  end
+  resources :posts, except: :index, concerns: :votable do
+    resources :comments, only: %i[create destroy], shallow: true, concerns: :votable
   end
   get '/home', to: 'static_pages#home'
   get '/about', to: 'static_pages#about'

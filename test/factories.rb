@@ -32,11 +32,12 @@ FactoryBot.define do
   end
 end
 
-# Posts
+# Votables
 FactoryBot.define do
-  trait(:no_link) { link { '' } }
-  trait(:no_body) { body { '' } }
+  # Posts
   factory :post do
+    trait(:no_link) { link { '' } }
+    trait(:no_body) { body { '' } }
     sequence(:title) { |n| "Title #{n}" }
     user
     created_at { Fake.creation_date_after(user) }
@@ -65,10 +66,8 @@ FactoryBot.define do
     factory(:post_without_body_or_link) { no_link; no_body }
     factory(:post_without_title) { title { '' } }
   end
-end
 
-# Comments
-FactoryBot.define do
+  # Comments
   factory :comment do
     sequence(:text) { |n| "Comment #{n}" }
     user
@@ -92,5 +91,32 @@ FactoryBot.define do
                                                     post: grandparent.post)
       end
     end
+  end
+
+  # Gives votables votes when built
+  trait :with_votes do
+    transient { upvotes { 2 } }
+    transient { downvotes { 1 } }
+    after(:create) do |votable, evaluator|
+      vote_context = "on_#{votable.class.to_s.downcase}".to_sym
+      create_list(:vote, evaluator.upvotes, vote_context, :upvote,
+                  votable: votable)
+      create_list(:vote, evaluator.downvotes, vote_context, :downvote,
+                  votable: votable)
+    end
+  end
+end
+
+# Votes
+FactoryBot.define do
+  factory :vote do
+    user
+    created_at { Fake.creation_date_after(user, votable) }
+    trait(:on_post) { association :votable, factory: :post }
+    trait(:on_comment) { association :votable, factory: :comment }
+    trait(:upvote) { up { true } }
+    trait(:downvote) { up { false } }
+    # Be an upvote by default
+    upvote
   end
 end

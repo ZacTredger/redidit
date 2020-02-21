@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_03_110359) do
+ActiveRecord::Schema.define(version: 2020_02_21_103414) do
 
   create_table "comments", force: :cascade do |t|
     t.integer "user_id"
@@ -46,7 +46,18 @@ ActiveRecord::Schema.define(version: 2020_02_03_110359) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.boolean "up"
+    t.integer "user_id"
+    t.string "votable_type", null: false
+    t.integer "votable_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["votable_type", "votable_id", "up"], name: "index_votes_on_votable_type_and_votable_id_and_up_vs_down"
+  end
+
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "posts", "users"
+  add_foreign_key "votes", "users"
 end
