@@ -2,12 +2,12 @@ require 'test_helper'
 
 module PostsTestHelpers
   # Set controller_test option to true to check the post passes controller validations
-  def make_post(factory = :post)
-    post posts_path, params: { post: post_params(factory) }
+  def make_post(factory = :post, **options)
+    post posts_path, params: { post: post_params(factory, **options) }
   end
 
-  def post_params(factory = :post)
-    @post_params ||= attributes_for(factory)
+  def post_params(factory = :post, **options)
+    @post_params ||= attributes_for(factory, **options)
   end
 
   # Expects @post to have a 1 line body, & to have been created via the new post

@@ -12,7 +12,7 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
   test 'each post in the feed belongs to the user' do
     # Create posts by other users to ensure they're not on the user's page
     4.times { create(:post) }
-    user = create(:user_with_posts, posts_count: 5)
+    user = create(:user, :posts, posts_count: 5)
     # Map each post title to the post object
     title_to_post = user.posts.each_with_object({}) do |post, hsh|
       hsh[post.title] = post
@@ -35,7 +35,7 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
   end
 
   test 'feed paginates correctly' do
-    user = create(:user_with_posts, posts_count: 21)
+    user = create(:user, :posts, posts_count: 21)
     get user_path(user)
     assert_select 'li.post-info', count: 20
   end

@@ -51,7 +51,7 @@ class CommentTest < ActiveSupport::TestCase
   test 'Recent comments are ordered correctly' do
     # Create a top level comment, a parent with 2 children, and a grandparent
     # with 2 children and 4 grandchildren (2 per parent)
-    post = create(:post_with_threaded_comments, threads_each_count: 1)
+    post = create(:post, :threaded_comments, threads_each_count: 1)
     assert_equal 3, post.comments.where(parent_id: nil).count,
                  'Expected three top-level comments. Maybe check factories?'
     post.comments.recent.each_with_object([]) do |comment, ancestry|

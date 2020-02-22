@@ -2,7 +2,7 @@ require 'test_helper'
 
 class PostsCommentsTest < ActionDispatch::IntegrationTest
   test 'post displays flat comments' do
-    post = create(:post_with_comments)
+    post = create(:post, :comments)
     text_to_comment = post.comments.each_with_object({}) do |comment, hsh|
       hsh[comment.text] = comment
     end
@@ -23,7 +23,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
   test 'post displays threaded comments' do
     # Create a top level comment, a parent with 2 children, and a grandparent
     # with 2 children and 4 grandchildren (2 per parent)
-    post = create(:post_with_threaded_comments, threads_each_count: 1)
+    post = create(:post, :threaded_comments, threads_each_count: 1)
     get post_path(post)
     assert_equal 3, post.comments.where(parent_id: nil).count,
                  'Expected three top-level comments. Maybe check factories?'
@@ -89,7 +89,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
   end
 
   test 'users can delete their own childless comments' do
-    post = create(:post_with_comments, comments_count: 1)
+    post = create(:post, :comments, comments_count: 1)
     comment = post.comments.first
     log_in_as(comment.user)
     get post_path(post)
@@ -134,7 +134,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
   end
 
   test 'users cannot delete eachothers comments' do
-    post = create(:post_with_comments, comments_count: 1)
+    post = create(:post, :comments, comments_count: 1)
     comment = post.comments.first
     log_in_as
     get post_path(post)

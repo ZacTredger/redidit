@@ -63,7 +63,7 @@ class PostsEditTest < ActionDispatch::IntegrationTest
   private
 
   def log_in_and_view_own_post
-    log_in_as create(:user_with_posts, posts_count: 1)
+    log_in_as create(:user, :posts, posts_count: 1)
     get post_path(@post = current_user.posts.first)
   end
 
