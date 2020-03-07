@@ -22,7 +22,7 @@
 </div>
 
 <div>
-  <% if logged_in? %>
+  <% if user_is_logged_in? %>
     <%= render partial: 'comments/form' %>
   <% else %>
   <div class="members-only">

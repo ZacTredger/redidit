@@ -63,8 +63,8 @@ class PostsEditTest < ActionDispatch::IntegrationTest
   private
 
   def log_in_and_view_own_post
-    log_in_as create(:user, :posts, posts_count: 1)
-    get post_path(@post = current_user.posts.first)
+    log_in_as (user = create(:user, :posts, posts_count: 1))
+    get post_path(@post = user.posts.first)
   end
 
   # Arbitrarily amends the string values of the post_params hash

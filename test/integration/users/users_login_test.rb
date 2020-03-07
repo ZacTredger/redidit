@@ -90,7 +90,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   end
 
   test 'remember-me users remembered & logged in after session expiry' do
-    log_in_as(remember_me: '1')
+    current_user = log_in_as(remember_me: '1')
     old_remember_token = cookies[:remember_token]
     session.delete(:user_id)
     get root_path

@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include ApplicationHelper
+  include SessionHelper
   protect_from_forgery with: :exception
   rescue_from ActionController::InvalidAuthenticityToken do
     forget current_user
@@ -8,8 +9,8 @@ class ApplicationController < ActionController::Base
 
   # Generic before-filters
   # Redirects non-logged-in users to login page, but puts current path in cookie
-  def logged_in_user
-    return if current_user.exists?
+  def reject_unless_user_logged_in
+    return if user_is_logged_in?
 
     store_location
     flash[:danger] = 'Please log in'

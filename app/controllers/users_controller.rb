@@ -1,8 +1,6 @@
 # Controls actions on the user resource
 class UsersController < ApplicationController
-  include UsersHelper
-  include ApplicationHelper
-  before_action :logged_in_user, only: %i[edit update destroy]
+  before_action :reject_unless_user_logged_in, only: %i[edit update destroy]
   before_action :correct_user, only: %i[edit update destroy]
   def show
     @user = User.find(params[:id])

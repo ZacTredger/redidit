@@ -58,7 +58,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
   end
 
   test 'can comment on post' do
-    log_in_as create(:user)
+    log_in_as (user = create(:user))
     get post_path(commentless_post)
     # Login and signup links NOT displayed
     assert_select 'form[action=?]', login_path, false
@@ -71,8 +71,8 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
     end
     assert_select '#error-explanation', false
     assert_select 'div.comment' do |(cmnt_obj)|
-      assert_select cmnt_obj, 'a[href=?]', user_path(current_user),
-                    text: /#{current_user.username}/
+      assert_select cmnt_obj, 'a[href=?]', user_path(user),
+                    text: /#{user.username}/
       assert_select cmnt_obj, 'p.comment-text', count: 1,
                                                 text: comment_attributes[:text]
     end

@@ -1,6 +1,5 @@
 class PostsController < ApplicationController
-  include ApplicationHelper
-  before_action :logged_in_user, except: :show
+  before_action :reject_unless_user_logged_in, except: :show
   before_action :set_post_var, only: %i[show edit update destroy]
   before_action :correct_user, only: %i[edit update destroy]
 

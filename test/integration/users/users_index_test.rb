@@ -3,7 +3,7 @@ require 'test_helper'
 # Test the user index page appears appropriately for users' authorization levels
 class UsersIndexTest < ActionDispatch::IntegrationTest
   test "shows users' info & links to their page; shows edit/destroy for self" do
-    log_in_as
+    @current_user = log_in_as
     create(:user)
     get users_path
     assert_select 'li.user', count: 2 do |user_summaries|
@@ -33,7 +33,7 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
   def displays_user_links(user_links, summary, works)
     a_user = User.find_by(username: user_links.first.text)
     assert_select user_links, 'a[href=?]', user_path(a_user)
-    count = a_user == current_user ? 1 : 0
+    count = a_user == @current_user ? 1 : 0
     works[count] = true
     assert_select summary, 'a[href=?]', edit_user_path(a_user), count: count
     assert_select summary, 'a[href=?][data-method=?][data-confirm]',

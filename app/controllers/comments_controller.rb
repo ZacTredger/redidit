@@ -1,6 +1,5 @@
 class CommentsController < ApplicationController
-  include ApplicationHelper
-  before_action :logged_in_user
+  before_action :reject_unless_user_logged_in
   before_action :set_post, only: :create
   before_action :correct_user, only: %i[destroy]
   def create

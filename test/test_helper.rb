@@ -21,6 +21,7 @@ module ActiveSupport
       post sessions_path, params: { user: { email: email || user.email,
                                             password: password,
                                             remember_me: remember_me } }
+      user
     end
 
     # Tests whether the controller redirected with a flash other than :success
