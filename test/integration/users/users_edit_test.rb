@@ -7,12 +7,12 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_path
     follow_redirect!
     assert flash && flash[:danger]
-    log_in_as @user
+    log_in as: @user
     assert_redirected_to edit_user_path(@user)
   end
 
   test 'edit of different user not permitted' do
-    log_in_as create(:user)
+    log_in
     get edit_user_path(create(:user))
     assert_redirect_with_bad_flash(location: root_path)
   end
@@ -23,7 +23,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test 'update of different user not permitted' do
-    log_in_as create(:user)
+    log_in
     update_with_valid_details create(:user)
     assert_redirect_with_bad_flash(location: root_path)
   end
@@ -35,14 +35,14 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test 'deletion of different user not permitted' do
-    log_in_as create(:user)
+    log_in
     @other_user = create(:user)
     assert_no_difference('User.count') { delete user_path(@other_user) }
     assert_redirect_with_bad_flash(location: root_path)
   end
 
   test 'edit form is populated with current details' do
-    log_in_as (@user = create(:user))
+    log_in as: (@user = create(:user))
     get edit_user_path(@user)
     assert_select 'form[action=?]', user_path(@user)
     assert_select 'input#user_username', value: @user.username
@@ -57,7 +57,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test 'update of self with invalid details rejected' do
-    log_in_as (@user = create(:user))
+    log_in as: (@user = create(:user))
     patch user_path(@user),
           params: { user: { username: '', email: '', password: '',
                             password_confirmation: '' } }
@@ -69,7 +69,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test 'update with valid details updates user attributes & redirects' do
-    log_in_as (@user = create(:user))
+    log_in as: (@user = create(:user))
     update_with_valid_details
     assert_redirected_to user_path(@user)
     follow_redirect!
@@ -79,7 +79,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test 'deletion request confirms certainty, then destroys user' do
-    log_in_as (@user = create(:user))
+    log_in as: (@user = create(:user))
     get edit_user_path(@user)
     assert_select 'form[action=?][data-confirm]',
                   user_path(@user) do |form|

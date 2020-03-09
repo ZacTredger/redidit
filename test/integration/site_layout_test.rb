@@ -8,7 +8,7 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
   end
 
   test 'All links appear in layout when logged-in' do
-    log_in_as
+    log_in
     get root_path
     assert_logged_in_header
   end

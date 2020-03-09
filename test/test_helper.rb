@@ -16,12 +16,12 @@ module ActiveSupport
 
     # Log in. If no user is passed, one is created from the user factory.
     # Optionally pass email or password keyword args to incorrectly sign in.
-    def log_in_as(user = create(:user), email: nil, password: 'password',
-                  remember_me: '0')
-      post sessions_path, params: { user: { email: email || user.email,
+    def log_in(as: create(:user), email: nil, password: 'password',
+               remember_me: '0')
+      post sessions_path, params: { user: { email: email || as.email,
                                             password: password,
                                             remember_me: remember_me } }
-      user
+      as
     end
 
     # Tests whether the controller redirected with a flash other than :success

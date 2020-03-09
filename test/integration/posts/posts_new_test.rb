@@ -9,7 +9,7 @@ class PostsNewTest < ActionDispatch::IntegrationTest
   end
 
   test 'can create post, which displays' do
-    log_in_as create(:user)
+    log_in
     get new_post_path
     assert_select 'form[action=?]', posts_path
     assert_select '#error-explanation', false
@@ -39,7 +39,7 @@ class PostsNewTest < ActionDispatch::IntegrationTest
   end
 
   def rejects_invalid_post_and_explains_errors(error_text:, **options)
-    log_in_as create(:user)
+    log_in
     get new_post_path
     assert_no_difference('Post.count') { make_post(**options) }
     assert_errors_explained(error_text)

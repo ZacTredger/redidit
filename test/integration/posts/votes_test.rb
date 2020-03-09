@@ -39,7 +39,7 @@ class VotesTest < ActionDispatch::IntegrationTest
       DIRECTIONS.each do |direction|
         define_method "test_#{direction}voting_a_#{delegator}"\
                       "_#{direction.effect}_its_karma" do
-          log_in_as
+          log_in
           get page_showing votable(delegator)
           assert_select "button##{direction}vote-#{votable}-#{votable.id}"
           assert_difference('votable.reload.karma', direction.value) do
@@ -50,7 +50,7 @@ class VotesTest < ActionDispatch::IntegrationTest
         define_method "test_withdrawing_#{direction}vote_resets_#{delegator}"\
                       '_karma' do
           vote = votable(delegator, direction.vote).votes.last
-          log_in_as vote.user
+          log_in as: vote.user
           get page_showing votable
           assert_select "#cancel-#{direction}vote-#{votable}-#{votable.id}"
           assert_difference 'votable.reload.karma', -1 * direction.value do
@@ -61,7 +61,7 @@ class VotesTest < ActionDispatch::IntegrationTest
         define_method "test_cannot_withdraw_others_users_#{delegator}"\
                       "_#{direction}vote" do
           vote = votable(delegator, direction.vote).votes.last
-          log_in_as
+          log_in
           get page_showing votable
           assert_select "#cancel-#{direction}vote-#{votable}-#{votable.id}",
                         false
@@ -82,7 +82,7 @@ class VotesTest < ActionDispatch::IntegrationTest
           assert_redirected_to login_path
           # follow_redirect!
           # assert_difference 'votable.reload.karma', opts[:value] do
-          #   log_in_as
+          #   log_in
           #   assert_redirected_to page_showing votable
           # end
         end
@@ -90,7 +90,7 @@ class VotesTest < ActionDispatch::IntegrationTest
         define_method "test_users_can_reverse_their_#{direction}vote_on_a"\
                       "#{delegator}" do
           vote = votable(delegator, direction.vote).votes.last
-          log_in_as vote.user
+          log_in as: vote.user
           get page_showing votable
           assert_select "#reverse-#{direction}vote-#{votable}-#{votable.id}"
           assert_difference 'votable.reload.karma', -2 * direction.value do
@@ -102,7 +102,7 @@ class VotesTest < ActionDispatch::IntegrationTest
         define_method "test_users_may_only_#{direction}vote_#{delegator}s"\
                       '_once' do
           vote = votable(delegator, direction.vote).votes.last
-          log_in_as vote.user
+          log_in as: vote.user
           get page_showing votable
           assert_select "button##{direction}vote-#{votable}-#{votable.id}",
                         false
@@ -114,7 +114,7 @@ class VotesTest < ActionDispatch::IntegrationTest
                       "_#{delegator}_changes_#{direction.opposite}vote_to"\
                       "_#{direction}vote" do
           vote = votable(delegator, direction.vote(:opposite)).votes.last
-          log_in_as vote.user
+          log_in as: vote.user
           get page_showing votable
           assert_difference 'votable.reload.karma', 2 * direction.value do
             cast_vote direction

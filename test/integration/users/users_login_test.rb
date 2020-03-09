@@ -37,12 +37,12 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
       assert_hidden_origin_input(login_form, page_of_interest)
     end
     get login_path, params: { origin: page_of_interest }
-    log_in_as
+    log_in
     assert_redirected_to page_of_interest
   end
 
   test 'clicking logout header button keeps you on the same page' do
-    log_in_as
+    log_in
     get(page_of_interest = post_path(create(:post)))
     assert_select 'header a[data-method=delete]', count: 1 do |(logout_link)|
       delete logout_link[:href]
@@ -57,7 +57,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
       assert_hidden_origin_input(login_form, page_of_interest)
     end
     get login_path, params: { origin: page_of_interest }
-    log_in_as
+    log_in
     assert_redirected_to page_of_interest
   end
 
@@ -77,7 +77,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     get edit_user_path(@user = create(:user))
     assert_redirected_to login_path
     follow_redirect!
-    log_in_as @user
+    log_in as: @user
     assert_redirected_to edit_user_path(@user)
   end
 
@@ -85,12 +85,12 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     get edit_user_path(@other_user = create(:user))
     assert_redirected_to login_path
     follow_redirect!
-    log_in_as create(:user)
+    log_in
     assert_redirect_with_bad_flash
   end
 
   test 'remember-me users remembered & logged in after session expiry' do
-    current_user = log_in_as(remember_me: '1')
+    current_user = log_in remember_me: '1'
     old_remember_token = cookies[:remember_token]
     session.delete(:user_id)
     get root_path
@@ -111,7 +111,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   def assert_log_in(**keyword_args)
     get new_session_path
     assert_on_login_page
-    log_in_as(**keyword_args)
+    log_in **keyword_args
   end
 
   def assert_on_login_page

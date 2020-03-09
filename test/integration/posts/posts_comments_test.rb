@@ -58,7 +58,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
   end
 
   test 'can comment on post' do
-    log_in_as (user = create(:user))
+    log_in as: (user = create(:user))
     get post_path(commentless_post)
     # Login and signup links NOT displayed
     assert_select 'form[action=?]', login_path, false
@@ -82,7 +82,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
   end
 
   test 'cannot create blank comment' do
-    log_in_as create(:user)
+    log_in
     get post_path(commentless_post)
     # Comment form displayed
     assert_comment_form_rendered
@@ -94,7 +94,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
   test 'users can delete their own childless comments' do
     post = create(:post, :comments, comments_count: 1)
     comment = post.comments.first
-    log_in_as(comment.user)
+    log_in as: comment.user
     get post_path(post)
     assert_deletable_comment(comment)
     assert_difference('Comment.count', -1) { delete comment_path(comment) }
@@ -107,7 +107,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
     parent_comment = create(:comment_with_children, child_count: 1)
     child_comment = parent_comment.children.first
     post = parent_comment.post
-    log_in_as(parent_comment.user)
+    log_in as: parent_comment.user
     get post_path(post)
     assert_deletable_comment(parent_comment)
     assert_no_difference('Comment.count') do
@@ -124,7 +124,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
       end
     end
     # Now delete the child and the parent should be deleted also
-    log_in_as(child_comment.user)
+    log_in as: child_comment.user
     get post_path(post)
     assert_deletable_comment(child_comment)
     assert_difference('Comment.count', -2) do
@@ -139,7 +139,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
   test 'users cannot delete eachothers comments' do
     post = create(:post, :comments, comments_count: 1)
     comment = post.comments.first
-    log_in_as
+    log_in
     get post_path(post)
     assert_select 'div.comment-actions a[href=?]', comment_path(comment),
                   method: :delete, count: 0

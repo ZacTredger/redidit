@@ -16,7 +16,7 @@ class PostsEditTest < ActionDispatch::IntegrationTest
 
   test "can't edit post of another user" do
     get post_path(@post = create(:post))
-    log_in_as(create(:user))
+    log_in
     assert_select 'a[href=?]', edit_post_path(@post), count: 0
     get edit_post_path(@post)
     assert_redirect_with_bad_flash
@@ -46,7 +46,7 @@ class PostsEditTest < ActionDispatch::IntegrationTest
 
   test "can't delete post of another user" do
     get post_path(@post = create(:post))
-    log_in_as create(:user)
+    log_in
     assert_select 'a[href=?]', post_path(@post), action: 'delete', count: 0
     assert_no_difference('Post.count') { delete post_path(@post) }
     assert_redirect_with_bad_flash
@@ -63,7 +63,7 @@ class PostsEditTest < ActionDispatch::IntegrationTest
   private
 
   def log_in_and_view_own_post
-    log_in_as (user = create(:user, :posts, posts_count: 1))
+    log_in as: (user = create(:user, :posts, posts_count: 1))
     get post_path(@post = user.posts.first)
   end
 
