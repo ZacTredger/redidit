@@ -182,22 +182,48 @@ div.edit-gravatar {
 }
 
 /* Metadata */
-%metadata {
+.metadata {
   color: $metadata-grey;
-  margin-bottom: 0px 8px 8px 8px;
+  margin: 0px 8px 8px 0px;
+  font-size: 14px;
   i, a, span, button {
     color: $metadata-grey;
     font-size: 14px;
   }
 }
 
+/* Votable components (posts and comments) */
+.votable-row {
+  @extend %row_flex;
+}
+
+.vote-controls {
+  @extend %column_flex;
+  form {
+    line-height: 12px;
+  };
+  button {
+    line-height: 12px;
+    border: 0;
+    padding: 0;
+    background-color: transparent;
+  }
+}
+
+hgroup.votable {
+  padding: 12px;
+}
+
+.karma {
+  padding: 0;
+  line-height: 20px;
+  font-weight: 700;
+}
+
+
 /* Posts */
 div.post {
   padding: 0 8px;
-}
-
-div.post-metadata {
-  @extend %metadata;
 }
 
 h1.post-title {
@@ -228,37 +254,35 @@ div.members-only {
 
 /* comments */
 
-div.comment-row {
-  display: flex;
-  align-items: stretch;
+.comment-row {
   padding: 0;
-  div.reverse-thread-area {
+  align-items: stretch;
+  .reverse-thread-area {
     display: flex;
     flex-direction: row-reverse;
     align-items: stretch;
     padding: 0;
-    div.threadline-space {
+    .threadline-space {
       display: flex;
       align-items: stretch;
-      width: 16px;
+      width: 18px;
       flex-shrink: 0;
       padding: 0;
-      div.threadline {
-        width: 8px;
+      .threadline {
+        width: 9px;
         flex-shrink: 0;
         padding: 0;
         border-right: 2px solid $grey-lightest;
       }
     }
   }
-  div.comment {
-    div.comment-metadata {
-      @extend %metadata;
-      i, a, span, button {
-        font-size: 12px;
-      }
+  .comment {
+    font-size: 12px;
+    padding: 8px;
+    .comment-metadata i, a, span, button {
+      font-size: 12px;
     };
-    p.comment-text {
+    .comment-text {
       padding: 0 2px;
     }
   }

@@ -68,4 +68,14 @@ class CommentTest < ActiveSupport::TestCase
       ancestry << comment
     end
   end
+
+  test 'karma is calculated correctly' do
+    assert_equal 1, voted_comment.karma
+  end
+
+  private
+
+  def voted_comment
+    create(:comment, :with_votes, upvotes: 3, downvotes: 2)
+  end
 end

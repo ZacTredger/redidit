@@ -29,7 +29,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
                  'Expected three top-level comments. Maybe check factories?'
 
     # Iterate through comment-rows, passing ancestry as a message
-    assert_select 'div.comment-row' do |comment_rows|
+    assert_select '.comment-row' do |comment_rows|
       comment_rows.inject([]) do |ancestry, comment_row|
         threadlines = css_select comment_row, 'div.threadline-space'
         # Check comment doesn't (seem to) have more threadlines than ancestors
@@ -116,7 +116,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert flash && flash[:info]
     assert_select 'div.comment', count: 2 do |comments|
-      assert_select comments, 'div.comment-metadata>span', count: 1 do |(user)|
+      assert_select comments, '.comment-metadata>span', count: 1 do |(user)|
         assert_match /[Dd]eleted/, user.text
       end
     end

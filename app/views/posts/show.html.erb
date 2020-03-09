@@ -1,11 +1,18 @@
 <% title = @post.title %>
 <% link = @post.link %>
+<% provide(:title, title) %>
 
 <div class="post">
   <% path = post_path(@post) %>
-  <%= render partial: 'shared/metadata',
-             locals: { resource: @post, path: path } %>
-  <%= tag.h1(class: 'post-title') { link.blank? ? title : tag.a(title, href: link) } %>
+  <section class="votable-row">
+    <%= render partial: 'shared/vote_controls',
+               locals: { controls: voting_controls_for(@post) } %>
+    <hgroup class="votable">
+      <%= render partial: 'shared/metadata',
+                locals: { resource: @post, path: path } %>
+      <%= tag.h1(class: 'post-title') { link.blank? ? title : tag.a(title, href: link) } %>
+    </hgroup>
+  </section>
   <% if @post.body %>
     <div class="post-body">
     <% @post.body.lines.map(&:chomp).each do |paragraph| %>
@@ -36,7 +43,7 @@
 
 <div class="comments">
   <% @comments.each do |comment| %>
-    <div class="comment-row">
+    <section class="comment-row votable-row">
       <% if (level = (ancestor = comment).level) > 0 %>
         <div class="reverse-thread-area">
           <% level.times do %>
@@ -47,6 +54,8 @@
           <% end %>
         </div>
       <% end %>
+      <%= render partial: 'shared/vote_controls',
+                locals: { controls: voting_controls_for(comment) } %>
       <div class="comment with-comment-<%= comment.id %>" id="<%= comment.id %>">
         <%= render partial: 'shared/metadata',
                   locals: { resource: comment, path: path } %>
@@ -57,6 +66,6 @@
           <%= render partial: 'shared/actions', locals: { resource: comment } %>
         </div>
       <% end %>
-    </div>
+    </section>
   <% end %>
 </div>

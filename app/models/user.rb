@@ -1,12 +1,12 @@
 # Models a site user
 class User < ApplicationRecord
   attr_reader :remember_token
-  has_many :posts
+  has_many(:posts) { include VotablePreloading }
   has_many :comments
   has_secure_password
   validates :username, presence: true, uniqueness: true,
                        format: { with: /\A[\w\-]+\z/ },
-            length: { maximum: 20 }
+                       length: { maximum: 20 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@([a-z\d\-]+\.)+[a-z]+\z/i.freeze
   validates :email, presence: true, length: { maximum: 255 },
                     uniqueness: { case_sensitive: false },
@@ -88,18 +88,21 @@ end
 class GuestUser
   ASSOCIATIONS = %i[posts comments].freeze
   FALSE_METHODS = %i[exists? authenticate].freeze
+  NIL_ATTRIBUTES = %i[id].freeze
 
   def method_missing(method_name, *_args, &_block)
     if ASSOCIATIONS.include?(method_name)
       method_name.to_s.classify.constantize.none
     elsif FALSE_METHODS.include?(method_name)
       false
+    elsif NIL_ATTRIBUTES.include?(method_name)
+      nil
     else
       self || super
     end
   end
 
-  def respond_to_missing?(*_args)
-    true
+  def respond_to_missing?(method_name)
+    (FALSE_METHODS + ASSOCIATIONS + NIL_ATTRIBUTES).include?(method_name)
   end
 end

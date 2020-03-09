@@ -1,11 +1,12 @@
 class PostsController < ApplicationController
   before_action :reject_unless_user_logged_in, except: :show
-  before_action :set_post_var, only: %i[show edit update destroy]
+  before_action :set_post_var, except: %i[show create]
   before_action :correct_user, only: %i[edit update destroy]
 
   def show
-    if @post
-      @comments = @post.comments.includes(:user).send(params[:order] || :recent)
+    if (@post = Post.includes(:user, vote_from: current_user)
+                    .find_by(id: params[:id]))
+      comments
       @comment = @post.comments.build
       return
     end
@@ -60,5 +61,11 @@ class PostsController < ApplicationController
   # Tests whether the user trying to interact with the post is its author
   def correct_user
     super(@post.user_id)
+  end
+
+  def comments
+    @comments ||=
+      @post.comments.includes(:user, vote_from: current_user)
+                    .send(params[:order] || :recent)
   end
 end

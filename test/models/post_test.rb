@@ -8,4 +8,14 @@ class PostTest < ActiveSupport::TestCase
     posts = (0...25).to_a.map! { create(:post) }
     assert_equal posts.max_by(&:created_at), Post.recent.first
   end
+
+  test 'karma is calculated correctly' do
+    assert_equal 1, voted_post.karma
+  end
+
+  private
+
+  def voted_post
+    create(:post, :with_votes, upvotes: 3, downvotes: 2)
+  end
 end

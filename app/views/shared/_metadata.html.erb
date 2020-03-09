@@ -1,5 +1,5 @@
 <% resource_type = resource.class.to_s.underscore %>
-<div class="<%= resource_type %>-metadata">
+<h3 class="metadata <%= resource_type %>-metadata">
   <%= 'Posted by' if resource_type == 'post' %>
   <% if(commenter = resource.user) %>
     <%= tag.a("u/#{commenter.username}", href: user_path(commenter)) %>
@@ -7,4 +7,4 @@
     <span>Comment deleted by user</span>
   <% end %>
   <%= tag.a(time_ago_in_words(resource.created_at) + ' ago', href: path) %>
-</div>
+</h3>

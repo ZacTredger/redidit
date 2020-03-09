@@ -1,13 +1,19 @@
 class Comment < ApplicationRecord
+  extend VotablePreloading
+  include Votable
   belongs_to :user
   belongs_to :post
   has_many :children, class_name: 'Comment', foreign_key: :parent_id
   belongs_to :parent, class_name: 'Comment', optional: true
-  has_many :votes, as: :votable, dependent: :destroy
+  has_many :votes, as: :votable, dependent: :destroy do
+    include VoteCollectionMethods
+  end
   validates :user, :post, :text, presence: true
   validates :parent, presence: true, unless: proc { |c| c.parent_id.blank? }
   before_destroy :cancel_if_parent
   after_destroy :destroy_parent_if_redacted
+  attr_accessor :viewer_id
+  attr_writer :level
 
   class << self
     def recent
@@ -29,8 +35,6 @@ class Comment < ApplicationRecord
   def redact
     update_columns(user_id: nil, text: nil)
   end
-
-  attr_writer :level
 
   def level
     @level ||= 0
