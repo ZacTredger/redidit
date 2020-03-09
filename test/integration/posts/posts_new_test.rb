@@ -17,6 +17,9 @@ class PostsNewTest < ActionDispatch::IntegrationTest
     assert_redirected_to post_path(@post = Post.last)
     follow_redirect!
     assert_post_contents_displayed
+    # OP should upvote their own post automatically
+    assert_equal 1, @post.karma
+    assert_equal @post.user, @post.votes.first.user
   end
 
   test 'multi-paragraph post body displays each para in own p-element' do

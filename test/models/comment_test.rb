@@ -70,7 +70,8 @@ class CommentTest < ActiveSupport::TestCase
   end
 
   test 'karma is calculated correctly' do
-    assert_equal 1, voted_comment.karma
+    # Note that the OP automatically updates via after_create callback in post
+    assert_equal 2, voted_comment.karma
   end
 
   private

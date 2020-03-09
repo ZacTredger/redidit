@@ -10,6 +10,7 @@ class Comment < ApplicationRecord
   end
   validates :user, :post, :text, presence: true
   validates :parent, presence: true, unless: proc { |c| c.parent_id.blank? }
+  after_create :add_creators_upvote
   before_destroy :cancel_if_parent
   after_destroy :destroy_parent_if_redacted
   attr_accessor :viewer_id

@@ -76,6 +76,9 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
       assert_select cmnt_obj, 'p.comment-text', count: 1,
                                                 text: comment_attributes[:text]
     end
+    # Commenter should upvote their own comment automatically
+    assert_equal 1, (comment = Comment.last).karma
+    assert_equal comment.user, comment.votes.first.user
   end
 
   test 'cannot create blank comment' do
