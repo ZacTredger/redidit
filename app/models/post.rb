@@ -3,7 +3,7 @@ class Post < ApplicationRecord
   include Votable
   belongs_to :user
   has_many(:comments) { include VotablePreloading }
-  has_many :votes, as: :votable, dependent: :destroy do
+  has_many :votes, as: :votable, dependent: :delete_all do
     include VoteCollectionMethods
   end
   validates :user, presence: true
@@ -12,6 +12,14 @@ class Post < ApplicationRecord
                    if: proc { |p| p.link.blank? }
   scope :recent, -> { order(created_at: :desc) }
   after_create :add_creators_upvote
+  after_destroy :remove_karma_from_creator
   self.per_page = 20
   attr_accessor :viewer_id
+
+  private
+
+  def remove_karma_from_creator
+    user.post_karma -= karma
+    user.save
+  end
 end

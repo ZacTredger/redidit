@@ -120,6 +120,16 @@ class VotesTest < ActionDispatch::IntegrationTest
             cast_vote direction
           end
         end
+
+        define_method "test_users_karma_reset_when_#{direction}voted"\
+                      "_#{delegator}_deleted" do
+          votable(delegator, direction.vote)
+          log_in as: (creator = votable.user)
+          get page_showing votable
+          assert_difference 'creator.reload.karma', -1 - direction.value do
+            delete send("#{votable}_path", votable)
+          end
+        end
       end
     end
   end

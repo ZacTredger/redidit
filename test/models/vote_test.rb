@@ -2,8 +2,8 @@ require 'test_helper'
 
 class VoteTest < ActiveSupport::TestCase
   test 'post-vote saves' do
-    assert_difference 'post.votes.count', 1 do
-      post.votes.create(attributes_for(:vote, user: create(:user)))
+    assert_difference 'post.reload.votes.count', 1 do
+      post.votes.create(attributes_for(:vote, user_id: create(:user).id))
     end
   end
 

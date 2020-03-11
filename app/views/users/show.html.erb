@@ -1,12 +1,9 @@
 <% provide(:title, @user.username) %>
 
-<div class="row">
-  <div class="col-md-9 ">
-    <%= render partial: 'posts/feed', locals: { posts: @posts }%>
-  </div>
-  
-  <aside class="col-md-3 user-info">
-    <%= render partial: 'users/user_info', locals: { user: @user, size: 50 } %>
-    <span><%= @user.username %></span>
-  </aside>
+<div class="col-md-9 ">
+  <%= render partial: 'posts/feed', locals: { posts: @posts }%>
 </div>
+
+<aside class="col-md-3 bio">
+  <%= render partial: 'users/user', locals: { user: @user, size: 80 } %>
+</aside>

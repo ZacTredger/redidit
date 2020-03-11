@@ -79,6 +79,12 @@ h2 {
   color: $gray-light;
 }
 
+h3 {
+  font-size: 1em;
+  margin: 0;
+  font-weight: bold;
+}
+
 p, div {
   font-size: 14px;
   padding: 0.8em 0 0.25em;
@@ -170,17 +176,6 @@ ul.nav {
   }
 }
 
-/* Gravatars */
-.gravatar {
-  float: left;
-  margin-right: 10px
-}
-
-div.edit-gravatar {
-  @extend %column_flex;
-  margin-bottom: 10px
-}
-
 /* Metadata */
 .metadata {
   color: $metadata-grey;
@@ -214,7 +209,7 @@ hgroup.votable {
   padding: 12px;
 }
 
-.karma {
+p.karma {
   padding: 0;
   line-height: 20px;
   font-weight: 700;
@@ -325,19 +320,87 @@ div.members-only {
   padding: 0
 }
 
+/* Shared user elements*/
+.user, .bio {
+  @extend %row_flex;
+  .bio-actions, .bio-info {
+    display: flex;
+    flex-direction: inherit;
+    align-items: inherit;
+    padding: 0;
+  }
+  .bio-action {
+    padding: 0;
+    border: none;
+  }
+  .username {
+    margin: 0;
+  }
+  p {
+    padding: 0;
+    color: $action-grey;
+  }
+  .karma {
+    display: flex;
+    flex-direction: inherit;
+    align-items: inherit;
+  }
+}
+
 /* Users index */
 .users {
-  @extend %index;
-  a.user-link {
-    @extend %index-link
+  .user {
+    padding: 10px;
+    border-bottom: 1px solid $grey-lightest;
   }
+  .bio-text {
+    flex: 1;
+    @extend %row_flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0;
+  }
+  a.user-link {
+    @extend %index-link;
+  }
+  .bio-actions :last-child {
+    padding-left: 10px;
+  }
+  .karma {
+    padding: 0 0 0 10px;
+    p {
+      padding-left: 5px;
+    }
+  }
+}
+
+/* User bio */
+.bio {
+  .bio-text {
+    @extend %column_flex;
+    align-items: center;
+    flex: 1;
+  }
+  .bio-actions :last-child {
+    padding-top: 5px;
+  }
+}
+
+.gravatar {
+  float: left;
+  margin-right: 10px;
+}
+
+div.edit-gravatar {
+  @extend %column_flex;
+  margin-bottom: 10px;
 }
 
 /* Posts feed */
 .posts {
   @extend %index;
   a.post-link {
-    @extend %index-link
+    @extend %index-link;
   }
 }
 

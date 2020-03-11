@@ -6,7 +6,7 @@
 
 <div class="pagination">
   <div class="pagination_info">
-    <%= page_entries_info posts %>
+    <%= page_entries_info posts, model: 'post' %>
   </div>
   <%= will_paginate posts, renderer: BootstrapPagination::Rails,
                            container: false %>

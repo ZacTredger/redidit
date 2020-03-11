@@ -42,6 +42,10 @@ class User < ApplicationRecord
     end
   end
 
+  def karma
+    post_karma + comment_karma
+  end
+
   # Generate random token and add its digest in DB
   def remember
     @remember_token = User.new_token

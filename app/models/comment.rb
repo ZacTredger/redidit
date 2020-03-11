@@ -5,13 +5,14 @@ class Comment < ApplicationRecord
   belongs_to :post
   has_many :children, class_name: 'Comment', foreign_key: :parent_id
   belongs_to :parent, class_name: 'Comment', optional: true
-  has_many :votes, as: :votable, dependent: :destroy do
+  has_many :votes, as: :votable, dependent: :delete_all do
     include VoteCollectionMethods
   end
   validates :user, :post, :text, presence: true
   validates :parent, presence: true, unless: proc { |c| c.parent_id.blank? }
   after_create :add_creators_upvote
   before_destroy :cancel_if_parent
+  after_destroy :remove_karma_from_creator
   after_destroy :destroy_parent_if_redacted
   attr_accessor :viewer_id
   attr_writer :level
@@ -34,7 +35,9 @@ class Comment < ApplicationRecord
 
   # Retains the fact of the comment's existence to show its children in context
   def redact
-    update_columns(user_id: nil, text: nil)
+    votes.delete_all
+    remove_karma_from_creator
+    update_columns(user_id: nil, text: nil, karma: 0)
   end
 
   def level
@@ -42,6 +45,13 @@ class Comment < ApplicationRecord
   end
 
   private
+
+  def remove_karma_from_creator
+    return if redacted?
+
+    user.comment_karma -= karma
+    user.save
+  end
 
   # Deletes comment only if it has no children, otherwise it must be redacted
   def cancel_if_parent

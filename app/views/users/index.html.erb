@@ -2,11 +2,11 @@
 <h1>All users</h1>
 
 <div class="row">
-  <div class="col-md-4">
-    <ul class="users">
-      <%= render  @users %>
-    </ul>
-  </div>
+  <ul class="users">
+    <% @users.each do |user| %>
+      <li class="user"><%= render user %></li>
+    <% end %>
+  </ul>
 </div>
 
 <div class="pagination">

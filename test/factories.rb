@@ -16,10 +16,7 @@ FactoryBot.define do
       end
     end
   end
-end
 
-# Votables
-FactoryBot.define do
   # Posts
   factory :post do
     sequence(:title) { |n| "Title #{n}" }
@@ -78,18 +75,15 @@ FactoryBot.define do
     transient { downvotes { 1 } }
     after(:create) do |votable, evaluator|
       vote_context = "on_#{votable.class.to_s.downcase}".to_sym
-      create_list(:vote, evaluator.upvotes, :user, vote_context, :up,
+      create_list(:vote, evaluator.upvotes, vote_context, :up,
                   votable: votable)
-      create_list(:vote, evaluator.downvotes, :user, vote_context, :down,
+      create_list(:vote, evaluator.downvotes, vote_context, :down,
                   votable: votable)
     end
   end
-end
 
-# Votes
-FactoryBot.define do
   factory :vote do
-    trait(:user) { user }
+    user
     created_at { Fake.creation_date_after(user, votable) }
     trait(:on_post) { association :votable, factory: :post }
     trait(:on_comment) { association :votable, factory: :comment }

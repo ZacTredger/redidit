@@ -6,7 +6,7 @@ module Votable
   end
 
   private
-  
+
   def add_creators_upvote
     votes.create user_id: user.id, up: true
   end

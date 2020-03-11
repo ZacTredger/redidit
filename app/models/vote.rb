@@ -15,7 +15,11 @@ class Vote < ApplicationRecord
   private
 
   def adjust_votables_karma(factor = 1)
-    votable.karma += (up ? 1 * factor : -1 * factor)
+    delta = up ? 1 * factor : -1 * factor
+    votable.karma += delta
     votable.save
+    user = votable.user
+    votable.is_a?(Post) ? user.post_karma += delta : user.comment_karma += delta
+    user.save
   end
 end

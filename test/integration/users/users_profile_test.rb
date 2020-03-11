@@ -3,10 +3,18 @@ require 'test_helper'
 class UsersProfileTest < ActionDispatch::IntegrationTest
   test 'static page features render correctly' do
     user = create(:user)
+    post = create :post, user_id: user.id
+    ([:down] * 1 + [:up] * 2)
+      .each { |direction| create(:vote, direction, votable: post) }
+    comment = create :comment, user: user
+    ([:down] * 4 + [:up] * 8)
+      .each { |direction| create(:vote, direction, votable: comment) }
     username_regex = /#{user.username}/
     get user_path(user)
     assert_select 'title', count: 1, text: username_regex
-    assert_select 'aside.user-info', text: username_regex
+    assert_select 'aside.bio', text: username_regex do |bio|
+      assert_select bio, '.karma p', text: /7/
+    end
   end
 
   test 'each post in the feed belongs to the user' do
