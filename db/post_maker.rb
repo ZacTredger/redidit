@@ -42,11 +42,16 @@ module Fake
       make_comments
     end
 
+    private
+
+    attr_reader :strategy
+
     def make_post
       @op = User.random_records(1, strategy: strategy).first
       created_at = Fake.creation_date_after(@op)
       @post = @op.posts.create!(title: @title, link: @link, body: @body,
                                 created_at: created_at, updated_at: created_at)
+      make_votes_for(@post)
     end
 
     def make_comments(min: 0, max: @max_comments || 30)
@@ -57,12 +62,16 @@ module Fake
         next comments unless @op_reply && rand(i) < 2
 
         comments.add(@op, @op_reply.call(text), parent: comments.last)
-      end
+      end.each { |comment| make_votes_for(comment) }
     end
 
-    private
-
-    attr_reader :strategy
+    def make_votes_for(votable)
+      electorate = User.where.not(id: votable.user.id).pluck(:id)
+      electorate.sample(rand(1...electorate.length)).each do |voter_id|
+        votable.votes.create(user_id: voter_id,
+                             up: Faker::Boolean.boolean(true_ratio: 0.7))
+      end
+    end
 
     def call_text
       @commentate&.call || RandomComment.generate
