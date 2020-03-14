@@ -162,7 +162,9 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
     get post_path(post)
     assert_select 'div.comment-actions a[href=?]', comment_path(comment),
                   method: :delete, count: 0
-    assert_no_difference('Comment.count') { delete comment_path(comment) }
+    assert_no_difference('Comment.count') do
+      assert_no_difference('Vote.count') { delete comment_path(comment) }
+    end
     assert_redirect_with_bad_flash
   end
 

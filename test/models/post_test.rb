@@ -14,6 +14,15 @@ class PostTest < ActiveSupport::TestCase
     assert_equal 2, voted_post.karma
   end
 
+  test 'deleting a post deletes all its dependents' do
+    @post = create(:post, :comments, comments_count: 1)
+    assert_difference 'Post.count', -1 do
+      assert_difference 'Post.count', -1 do
+        assert_difference('Vote.count', -2) { @post.destroy }
+      end
+    end
+  end
+
   private
 
   def voted_post

@@ -74,6 +74,13 @@ class CommentTest < ActiveSupport::TestCase
     assert_equal 2, voted_comment.karma
   end
 
+  test 'deleting a comment deletes its dependent votes' do
+    @comment = create(:comment)
+    assert_difference('Comment.count', -1) do
+      assert_difference('Vote.count', -1) { @comment.destroy }
+    end
+  end
+
   private
 
   def voted_comment

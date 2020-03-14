@@ -91,5 +91,7 @@ FactoryBot.define do
     trait(:down) { up { false } }
     # Be an upvote by default
     up
+    # Be on a post by default
+    on_post
   end
 end

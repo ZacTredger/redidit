@@ -2,7 +2,7 @@ class Post < ApplicationRecord
   extend VotablePreloading
   include Votable
   belongs_to :user
-  has_many(:comments) { include VotablePreloading }
+  has_many(:comments, dependent: :destroy) { include VotablePreloading }
   has_many :votes, as: :votable, dependent: :delete_all do
     include VoteCollectionMethods
   end

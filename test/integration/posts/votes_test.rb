@@ -90,7 +90,7 @@ class VotesTest < ActionDispatch::IntegrationTest
         end
 
         define_method "test_users_can_reverse_their_#{direction}vote_on_a"\
-                      "#{delegator}" do
+                      "_#{delegator}" do
           vote = votable(delegator, direction.vote).votes.last
           log_in as: vote.user
           get page_showing votable
