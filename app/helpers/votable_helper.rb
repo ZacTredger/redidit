@@ -33,7 +33,7 @@ module VotableHelper
   # Display no controls for redacted comments
   class NoControls < VotingControls
     def html
-      content_tag :div, class: 'no-controls'
+      content_tag(:div, class: 'no-controls') {}
     end
   end
 
@@ -48,7 +48,7 @@ module VotableHelper
     def html
       content_tag :div, class: 'vote-controls' do
         safe_join [button_to(model, upward_button) { render upward_arrow },
-                   content_tag(:p, class: 'karma') { votable.karma },
+                   content_tag(:p, votable.karma, class: 'karma'),
                    button_to(model, downward_button) { render downward_arrow }]
       end
     end

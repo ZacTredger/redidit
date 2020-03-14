@@ -4,7 +4,7 @@
 
 <div class="post">
   <% path = post_path(@post) %>
-  <section class="votable-row">
+  <section class="votable-row post-row">
     <%= voting_controls_for(@post, self).html %>
     <hgroup class="votable">
       <%= render partial: 'shared/metadata',
@@ -58,12 +58,12 @@
         <%= render partial: 'shared/metadata',
                   locals: { resource: comment, path: path } %>
         <p class="comment-text"><%= comment.text || 'deleted' %></p>
-      </div>
       <% if current_user == comment.user %>
         <div class="comment-actions">
           <%= render partial: 'shared/actions', locals: { resource: comment } %>
         </div>
       <% end %>
+      </div>
     </section>
   <% end %>
 </div>

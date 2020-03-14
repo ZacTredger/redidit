@@ -132,6 +132,7 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
       end
       # Vote controls aren't displayed on redacted comments
       assert_select comments.first, 'button', false
+      assert_select comments.first, '.no-controls', text: ''
     end
     # And redacted comments can't be voted on
     assert_no_difference 'Vote.count' do

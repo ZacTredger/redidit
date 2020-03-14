@@ -188,6 +188,11 @@ ul.nav {
 }
 
 /* Votable components (posts and comments) */
+@mixin action {
+  color: $action-grey;
+  font-weight: 700;
+}
+
 .votable-row {
   @extend %row_flex;
 }
@@ -271,21 +276,24 @@ div.members-only {
       }
     }
   }
-  .comment {
+}
+
+.comment {
+  font-size: 12px;
+  padding: 8px;
+  .comment-metadata i, a, span, button {
     font-size: 12px;
-    padding: 8px;
-    .comment-metadata i, a, span, button {
-      font-size: 12px;
-    };
-    .comment-text {
-      padding: 0 2px;
-    }
+  };
+  .comment-text {
+    padding: 0 2px;
+  }
+  div {
+    padding: 0;
   }
 }
 
-@mixin action {
-  color: $action-grey;
-  font-weight: 700;
+.comment-actions a {
+  @include action;
 }
 
 .post-actions {
