@@ -2,7 +2,7 @@ class Vote < ApplicationRecord
   belongs_to :user
   belongs_to :votable, polymorphic: true
   validates :user, presence: true
-  validates :votable, presence: true
+  validates_associated :votable
   validates :up, inclusion: { in: [true, false] }
   after_create :adjust_votables_karma
   after_update -> { adjust_votables_karma(2) }

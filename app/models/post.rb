@@ -16,6 +16,10 @@ class Post < ApplicationRecord
   self.per_page = 20
   attr_accessor :viewer_id
 
+  def redacted?
+    false
+  end
+
   private
 
   def remove_karma_from_creator

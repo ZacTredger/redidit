@@ -27,11 +27,11 @@ class VotesTest < ActionDispatch::IntegrationTest
 
   VOTABLE_DELEGATORS = [
     PostDelegator.new(:post),
-    CommentDelegator.new(:comment)
+    # CommentDelegator.new(:comment)
   ].freeze
   DIRECTIONS = [
     Direction.new(:up, :down, 'increases', 1),
-    Direction.new(:down, :up, 'decreases', -1)
+    # Direction.new(:down, :up, 'decreases', -1)
   ].freeze
 
   SETUP = begin

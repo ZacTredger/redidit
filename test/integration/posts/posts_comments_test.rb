@@ -126,11 +126,19 @@ class PostsCommentsTest < ActionDispatch::IntegrationTest
     assert_redirected_to post_path(post)
     follow_redirect!
     assert flash && flash[:info]
-    assert_select 'div.comment', count: 2 do |comments|
-      assert_select comments, '.comment-metadata>span', count: 1 do |(user)|
+    assert_select '.comment-row', count: 2 do |comments|
+      assert_select comments.first, '.comment-metadata>span' do |(user)|
         assert_match /[Dd]eleted/, user.text
       end
+      # Vote controls aren't displayed on redacted comments
+      assert_select comments.first, 'button', false
     end
+    # And redacted comments can't be voted on
+    assert_no_difference 'Vote.count' do
+      post comment_votes_path(parent_comment),
+           params: { vote: attributes_for(:vote) }
+    end
+    assert_redirect_with_bad_flash
     # Now both the child comment and its redacted parent can be deleted.
     log_in as: child_comment.user
     get post_path(post)

@@ -1,32 +1,56 @@
 # Use to construct voting buttons on posts and comments
 module VotableHelper
-  def voting_controls_for(votable)
-    VotingControls.for(votable)
+  def voting_controls_for(votable, view)
+    VotingControls.for(votable, view)
   end
 
-  # Parent class
+  # Ancestor and constructor class
   class VotingControls
     class << self
       # Constructor
-      def for(votable)
+      def for(votable, view)
+        return NoControls.new(view) if votable.redacted?
+
         subclass =
           if (vote = votable.viewers_vote)
             vote.up ? StartingUp : StartingDown
           else StartingNeutral
           end
-        subclass.new(votable)
+        subclass.new(votable, view)
       end
     end
 
-    attr_reader :model, :votable_identifier
-
-    def initialize(votable)
-      @votable = votable
-      @votable_identifier = "-#{votable.class.to_s.downcase}-#{votable.id}"
+    def initialize(view)
+      @view = view
     end
 
-    def karma
-      votable.karma
+    private
+
+    attr_reader :view
+    delegate :safe_join, :content_tag, :button_to, :render, to: :view
+  end
+
+  # Display no controls for redacted comments
+  class NoControls < VotingControls
+    def html
+      content_tag :div, class: 'no-controls'
+    end
+  end
+
+  # Parent class of actual voting-control generators
+  class ActualControls < VotingControls
+    def initialize(votable, view)
+      @votable = votable
+      @votable_identifier = "-#{votable.class.to_s.downcase}-#{votable.id}"
+      super(view)
+    end
+
+    def html
+      content_tag :div, class: 'vote-controls' do
+        safe_join [button_to(model, upward_button) { render upward_arrow },
+                   content_tag(:p, class: 'karma') { votable.karma },
+                   button_to(model, downward_button) { render downward_arrow }]
+      end
     end
 
     def upward_arrow
@@ -39,13 +63,14 @@ module VotableHelper
 
     private
 
-    attr_reader :votable, :args_for
+    attr_reader :votable, :args_for, :model, :votable_identifier
 
     # Default colour is neutral-grey
     def arrow(direction: 'up', colour: '#878a8c')
-      { partial: 'svg/vote_arrow',
+      {
+        partial: 'svg/vote_arrow',
         formats: [:svg],
-        locals: { direction: direction, colour: colour}
+        locals: { direction: direction, colour: colour }
       }
     end
 
@@ -55,10 +80,10 @@ module VotableHelper
   end
 
   # Supplies variations for controls when user has not yet voted on the votable
-  class StartingNeutral < VotingControls
-    def initialize(votable)
+  class StartingNeutral < ActualControls
+    def initialize(votable, view)
       @model = [votable, :votes]
-      super(votable)
+      super
     end
 
     def upward_button
@@ -71,10 +96,10 @@ module VotableHelper
   end
 
   # Supplies variations for controls when user has already upvoted the votable
-  class StartingUp < VotingControls
-    def initialize(votable)
+  class StartingUp < ActualControls
+    def initialize(votable, view)
       @model = votable.viewers_vote
-      super(votable)
+      super
     end
 
     def upward_button
@@ -92,10 +117,10 @@ module VotableHelper
   end
 
   # Supplies variations for controls when user has already downvoted the votable
-  class StartingDown < VotingControls
-    def initialize(votable)
+  class StartingDown < ActualControls
+    def initialize(votable, view)
       @model = votable.viewers_vote
-      super(votable)
+      super
     end
 
     def upward_button

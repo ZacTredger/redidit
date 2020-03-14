@@ -5,7 +5,7 @@ class VotesController < ApplicationController
 
   def create
     vote = @votable.votes.build(vote_params)
-    flash[:warning] = vote.error_text unless vote.save
+    flash[:warning] = vote.errors.full_messages unless vote.save
     redirect_to post_path(@post)
   end
 

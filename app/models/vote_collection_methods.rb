@@ -23,12 +23,14 @@ module VoteCollectionMethods
       false
     end
 
-    def error_text
-      "You already #{up_or_down_voted} this!"
+    def errors
+      ErrorsProxy.new "You already #{up_or_down_voted} this!"
     end
 
     private
 
     attr_reader :up_or_down_voted
   end
+
+  ErrorsProxy = Struct.new(:full_messages)
 end

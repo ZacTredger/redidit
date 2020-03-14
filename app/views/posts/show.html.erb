@@ -5,8 +5,7 @@
 <div class="post">
   <% path = post_path(@post) %>
   <section class="votable-row">
-    <%= render partial: 'shared/vote_controls',
-               locals: { controls: voting_controls_for(@post) } %>
+    <%= voting_controls_for(@post, self).html %>
     <hgroup class="votable">
       <%= render partial: 'shared/metadata',
                 locals: { resource: @post, path: path } %>
@@ -54,8 +53,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= render partial: 'shared/vote_controls',
-                locals: { controls: voting_controls_for(comment) } %>
+      <%= voting_controls_for(comment, self).html %>
       <div class="comment with-comment-<%= comment.id %>" id="<%= comment.id %>">
         <%= render partial: 'shared/metadata',
                   locals: { resource: comment, path: path } %>
