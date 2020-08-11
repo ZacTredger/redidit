@@ -30,4 +30,12 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  will_paginate:
+    previous_label: "<b>&#10094;</b> Previous"
+    next_label: "Next <b>&#10095;</b>"
+    page_entries_info:
+      multi_page_html: "<b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b> %{model}"
+      single_page_html:
+          zero:  "No %{model} found"
+          one:   "Showing the only %{model}"
+          other: "Showing <b>all&nbsp;%{count}</b> %{model}"

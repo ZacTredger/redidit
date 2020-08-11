@@ -1,19 +1,60 @@
-// @import "bootstrap-sprockets";
-@import "bootstrap";
+/* Reset browser defaults */
+/*----------------------------------------------------------------------------*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section { display: block; }
+body { line-height: 1; }
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
 
 /* mixins, variables, etc. */
-
+/*----------------------------------------------------------------------------*/
+$background-grey: #dae0e6;
 $grey-lightest: #eaeaea;
 $reddit-orange: #ff4500;
 $reddit-blue: #0079d3;
 $reddit-light-blue: #339eff;
 $action-grey: #878a8c;
 $metadata-grey: #7e7c7c;
+$text-black: #222;
+$log-in-yellow: #fffcc8;
 
-@mixin box_sizing {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+/* natural box model but allow divergence */
+html {
   box-sizing: border-box;
+  background-color: $background-grey;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 
 %column_flex {
@@ -28,41 +69,16 @@ $metadata-grey: #7e7c7c;
   align-items: center;
 }
 
-/* miscellaneous */
-
-.debug_dump {
-  clear: both;
-  float: left;
-  width: 100%;
-  margin-top: 45px;
-  @include box_sizing;
-}
-
 /* universal */
-section {
-  overflow: auto;
-}
-
-textarea {
-  resize: vertical;
-}
-
-.center {
-  text-align: center;
-  h1 {
-    margin-bottom: 10px;
-  }
-}
-
-a {
-  color: $reddit-blue;
-}
+/*----------------------------------------------------------------------------*/
 
 /* typography */
-h1, h2, h3, h4, h5, h6, button, a {
+h1, h2, h3, h4, h5, h6, button, a, p, input, textarea {
   line-height: 1;
   font-family: IBMPlexSans, Arial, sans-serif;
   font-weight: 500;
+  color: $text-black;
+  text-decoration-line: none;
 }
 
 h1 {
@@ -76,7 +92,6 @@ h2 {
   margin-bottom: 30px;
   text-align: center;
   font-weight: normal;
-  color: $gray-light;
 }
 
 h3 {
@@ -85,28 +100,65 @@ h3 {
   font-weight: bold;
 }
 
-p, div {
-  font-size: 14px;
-  padding: 0.8em 0 0.25em;
+p, div, input, textarea {
+  font-size: 11pt;
   margin: 0;
   font-family: Noto Sans, Arial, sans-serif;
 }
 
+ul {
+  padding: 0;
+  margin: 0;
+}
+
 /* forms */
+form:not(.button_to) {
+  a {
+    color: $reddit-blue;
+    font-weight: 600;
+  }
+}
+
+.focus.form {
+  @extend .content-card;
+  padding: 30px !important;
+  max-width: 520px;
+}
+
 input, textarea, select, .uneditable_input {
   border: 1px solid #bbb;
+  border-radius: 4px;
+  padding: 8px;
   width: 100%;
-  margin-bottom: 15px;
-  @include box_sizing;
+  margin: 8px 0 16px 0;
+}
+
+textarea {
+  resize: vertical;
+}
+
+label {
+  font-weight: 600;
 }
 
 input {
   height: auto !important;
 }
 
+form.button_to {
+  margin: 0 8px;
+}
+
+.btn {
+  margin: 8px 0 0;
+  &:hover, &:focus {
+    opacity: 0.6;
+  }
+}
+
 .btn-primary {
   background-color: $reddit-blue;
-  border-color: white;
+  color: white;
 }
 
 .btn-under {
@@ -127,9 +179,139 @@ input {
   margin-left: 0;
 }
 
+/* miscellaneous */
+/*----------------------------------------------------------------------------*/
+.debug_dump {
+  clear: both;
+  float: left;
+  width: 100%;
+  margin-top: 45px;
+}
+
+/* Errors */
+#error-explanation {
+  color: red;
+  ul {
+    color: red
+  }
+}
+
+.field_with_errors {
+  .form-control {
+    color: red;
+  }
+}
+
+/* Error pages */
+.focus.error {
+  @extend .content-card;
+  padding: 3rem;
+  > * {
+    margin: 0;
+    padding: 1rem;
+    text-align: center;
+  }
+}
+
+/* Structure */
+/*----------------------------------------------------------------------------*/
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.content-card {
+  background-color: white;
+  border-radius: 4px;
+  padding: 8px;
+}
+
 /* Header */
 header {
-  position: relative;
+  @extend %row_flex;
+  justify-content: space-between;
+  background-color: white;
+}
+
+@mixin single-column {
+  grid-template-columns: [content-start focus-start] 1fr
+                         [focus-end content-end];
+  align-self: center;
+}
+
+/* Content */
+.content {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+  &.with-aside { flex-direction: row-reverse }
+}
+
+/* Focus */
+.focus {
+  flex-grow: 2;
+  max-width: 740px;
+  @extend %column_flex;
+  align-items: stretch;
+}
+
+.focus.index {
+  display: grid;
+  grid: auto-flow auto / 1fr;
+  gap: 10px;
+  .user, .post-row {
+    @extend .content-card;
+  }
+}
+
+/* Aside */
+aside {
+  max-width: 310px;
+  margin-left: 40px;
+}
+
+@media (max-width: 850px) {
+  .content.with-aside {
+    flex-direction: column;
+    align-items: center;
+  }
+  aside {
+    margin: 0 0 40px 0;
+  }
+}
+
+/* Generic indices */
+/*----------------------------------------------------------------------------*/
+%index {
+  list-style: none;
+  margin: 0;
+  li, article {
+    overflow: auto;
+    padding: 10px 0;
+    border-bottom: 1px solid $grey-lightest;
+    @extend %row_flex;
+  }
+}
+
+%index-link {
+  font-size: 18px;
+  line-height: 1em;
+  margin: 0;
+  padding: 0;
+  color: $text-black;
+}
+
+/* Navbar */
+/*----------------------------------------------------------------------------*/
+.nav {
+  @extend %row_flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  &> a {
+    padding: 15px;
+  }
 }
 
 .dropdown-toggle {
@@ -142,8 +324,24 @@ header {
   }
 }
 
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  @extend %column_flex;
+  background-color: white;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  list-style: none;
+  a {
+    padding: 6px 12px;
+    &:last-child {
+      border-top: 1px solid $action-grey;
+    }
+  }
+}
+
 .logo {
-  display: inline-block;
+  @extend %row_flex;
   margin: 0px 5px;
   #alien {
     height: 32px
@@ -152,28 +350,41 @@ header {
     height: 18px
   }
 }
+.with-aside > .focus {
+  align-content: flex-end;
+}
 
-/* Navbar */
-ul.nav {
+/* Pagination */
+/*----------------------------------------------------------------------------*/
+.pagination-container {
+  @extend .content-card;
+  border-radius: 4px 4px 0 0;
   @extend %row_flex;
-  form {
-    padding-left: 8px;
+  justify-content: space-between;
+  background-color: $metadata-grey;
+  color: $background-grey;
+  * { font-size: 1em; }
+  a {
+    font-weight: 600;
+    color: white;
+    &:hover, &:active {
+      color: $reddit-light-blue;
+      transition: color 0.3s;
+    }
+  }
+  .current {
+    font-weight: 100;
+  }
+  .pagination > a, em {
+    padding: 0 3px;
   }
 }
 
-/* Errors */
-#error-explanation {
-  color: red;
-  ul {
-    color: red
-  }
-}
-
-.field_with_errors {
-  @extend .has-error;
-  .form-control {
-    color: $state-danger-text;
-  }
+/* Votable components (for posts and comments) */
+/*----------------------------------------------------------------------------*/
+@mixin action {
+  color: $action-grey;
+  font-weight: 600;
 }
 
 /* Metadata */
@@ -181,16 +392,11 @@ ul.nav {
   color: $metadata-grey;
   margin: 0px 8px 8px 0px;
   font-size: 14px;
-  i, a, span, button {
+  i, a, span, button, span {
     color: $metadata-grey;
     font-size: 14px;
+    font-weight: 400;
   }
-}
-
-/* Votable components (posts and comments) */
-@mixin action {
-  color: $action-grey;
-  font-weight: 700;
 }
 
 .votable-row {
@@ -210,33 +416,71 @@ ul.nav {
   }
 }
 
-hgroup.votable {
-  padding: 12px;
-}
-
 p.karma {
   padding: 0;
   line-height: 20px;
   font-weight: 700;
 }
 
-
-/* Posts */
-div.post {
-  padding: 0 8px;
+/* Log in and sign-up */
+.form.log-in, .form.sign-up {
+  input[type="password"], input[type="email"], input[type="text"] {
+    background-color: $log-in-yellow;
+  }
+  .signup-link {
+    margin-top: 16px;
+  }
+  > h1 {
+    order: -1;
+  }
+  > .alert {
+    font-size: 1.2em;
+    margin-bottom: 1rem;
+    animation: blueToBlack ease 3s;
+  }
 }
 
-h1.post-title {
+@keyframes blueToBlack {
+  0% { color: $reddit-orange; }
+  100% { color: $text-black; }
+}
+
+/* Posts */
+/*----------------------------------------------------------------------------*/
+.post.focus {
+  @extend .content-card;
+  padding: 16px;
+}
+
+.post-title {
+  display: flex;
+  flex-direction: column;
   font-size: 20px;
   line-height: 24px;
   text-align: start;
   margin: 0;
+  .external-link {
+    color: $reddit-blue;
+    font-size: 10pt;
+    margin: 4px 0;
+  }
 }
 
-div.post-body {
-  margin: 6px 0;
-  max-width: 800px;
-  margin: 0;
+.post-body {
+  padding: 12px 0 0 32px;
+}
+
+.post-actions {
+  @extend %row_flex;
+  @include action;
+  padding: 8px 0 0 28px;
+  div {
+    margin-right: 4px;
+    padding: 4px;
+  }
+  i, a, span, button {
+    @include action
+  }
 }
 
 div.members-only {
@@ -252,10 +496,20 @@ div.members-only {
   }
 }
 
-/* comments */
+.commenting {
+  padding: 12px 16px 10px 32px;
+  form { @extend %column_flex }
+  textarea { margin-bottom: 8px }
+  input {
+    margin: 0;
+    max-width: 150px;
+    align-self: flex-end;
+  }
+}
 
+/* comments */
+/*----------------------------------------------------------------------------*/
 .comment-row {
-  padding: 0;
   align-items: stretch;
   .reverse-thread-area {
     display: flex;
@@ -276,11 +530,14 @@ div.members-only {
       }
     }
   }
+  .vote-controls {
+    padding-top: 12px;
+  }
 }
 
 .comment {
   font-size: 12px;
-  padding: 8px;
+  padding: 12px 8px 8px;
   .comment-metadata i, a, span, button {
     font-size: 12px;
   };
@@ -296,39 +553,10 @@ div.members-only {
   @include action;
 }
 
-.post-actions {
-  @extend %row_flex;
-  @include action;
-  padding: 4px 16px 0px 4px;
-  div {
-    margin-right: 4px;
-    padding: 4px;
-  }
-  i, a, span, button {
-    @include action
-  }
-}
+/* Users */
+/*----------------------------------------------------------------------------*/
 
-/* Generic indices */
-%index {
-  list-style: none;
-  margin: 0;
-  li {
-    overflow: auto;
-    padding: 10px 0;
-    border-bottom: 1px solid $gray-lighter;
-    @extend %row_flex;
-  }
-}
-
-%index-link {
-  font-size: 18px;
-  line-height: 1em;
-  margin: 0;
-  padding: 0
-}
-
-/* Shared user elements*/
+/* Shared user elements */
 .user, .bio {
   @extend %row_flex;
   .bio-actions, .bio-info {
@@ -343,6 +571,7 @@ div.members-only {
   }
   .username {
     margin: 0;
+    color: $action-grey;
   }
   p {
     padding: 0;
@@ -354,6 +583,8 @@ div.members-only {
     align-items: inherit;
   }
 }
+
+.bio-text { margin-left: 10px }
 
 /* Users index */
 .users {
@@ -394,67 +625,7 @@ div.members-only {
   }
 }
 
-.gravatar {
-  float: left;
-  margin-right: 10px;
-}
-
 div.edit-gravatar {
   @extend %column_flex;
   margin-bottom: 10px;
-}
-
-/* Posts feed */
-.posts {
-  @extend %index;
-  a.post-link {
-    @extend %index-link;
-  }
-}
-
-/* Error pages */
-
-.rails-default-error-page {
-  background-color: #EFEFEF;
-  color: #2E2F30;
-  text-align: center;
-  font-family: arial, sans-serif;
-  margin: 0;
-  h1 {
-    font-size: 125%;
-    color: $reddit-orange;
-    line-height: 1.5em;
-    margin: 20px 0 10px 0;
-  }
-  div.dialog {
-    width: 95%;
-    max-width: 33em;
-    margin: 4em auto 0;
-    > div {
-      border: 1px solid #CCC;
-      border-right-color: #999;
-      border-left-color: #999;
-      border-bottom-color: #BBB;
-      border-top: $reddit-orange solid 4px;
-      border-top-left-radius: 9px;
-      border-top-right-radius: 9px;
-      background-color: white;
-      padding: 7px 12% 7px;
-      box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-    };
-    > p {
-      margin: 0 0 1em;
-      padding: 1em;
-      background-color: #F7F7F7;
-      border: 1px solid #CCC;
-      border-right-color: #999;
-      border-left-color: #999;
-      border-bottom-color: #999;
-      border-bottom-left-radius: 4px;
-      border-bottom-right-radius: 4px;
-      border-top-color: #DADADA;
-      color: #666;
-      box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-    }
-  }
 }

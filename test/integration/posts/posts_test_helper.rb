@@ -13,18 +13,20 @@ module PostsTestHelpers
   # Expects @post to have a 1 line body, & to have been created via the new post
   # form in the last request
   def assert_post_contents_displayed
-    post_params[:link] ? assert_linked_title : assert_title
+    assert_link_to_external_link
     assert_select('p', text: post_params[:body])
-    assert_select('a[href=?]', user_path(@post.user), text: /#{@post.user.username}/)
+    assert_select('a[href=?]', user_path(@post.user),
+                  text: /#{@post.user.username}/)
   end
 
   private
 
-  def assert_title
-    assert_select('h', text: post_params[:title])
-  end
+  def assert_link_to_external_link
+    return unless (link = @post.link)
 
-  def assert_linked_title
-    assert_select('a[href=?]', post_params[:link], text: post_params[:title])
+    assert_select 'a.external-link', count: 1 do |(external_link)|
+      assert_equal link, external_link['href']
+      assert_equal post_params[:link].slice(12..), external_link.text
+    end
   end
 end

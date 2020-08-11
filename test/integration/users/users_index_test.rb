@@ -6,7 +6,7 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     @current_user = log_in
     create(:user)
     get users_path
-    assert_select 'li.user', count: 2 do |user_summaries|
+    assert_select '.user', count: 2 do |user_summaries|
       assert_displays_current_and_other_users(user_summaries)
     end
   end
@@ -15,7 +15,7 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     log_in
     21.times { create(:user) }
     get users_path
-    assert_select 'li.user', count: 20
+    assert_select '.user', count: 20
   end
 
   private

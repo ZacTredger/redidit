@@ -7,7 +7,6 @@ ruby '2.6.4'
 gem 'bcrypt', '~> 3.1.7'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
-gem 'bootstrap-sass'
 gem 'coffee-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.0'
@@ -31,7 +30,6 @@ gem 'jbuilder', '~> 2.7'
 gem 'faker'
 # Pagination
 gem 'will_paginate'
-gem 'will_paginate-bootstrap'
 
 # Get random records quickly (used during seeding)
 gem 'quick_random_records'
@@ -52,6 +50,7 @@ end
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'listen', '~> 3'
+  gem 'browser_sync_rails'
   gem 'rb-readline'
   gem 'reek'
   gem 'rubocop'

@@ -1,9 +1,10 @@
 <% provide(:title, @user.username) %>
+<% provide(:focus_class, 'index posts') %>
 
-<div class="col-md-9 ">
-  <%= render partial: 'posts/feed', locals: { posts: @posts }%>
-</div>
+<%= render partial: 'posts/feed', locals: { posts: @posts }%>
 
-<aside class="col-md-3 bio">
-  <%= render partial: 'users/user', locals: { user: @user, size: 80 } %>
-</aside>
+<% content_for :aside do %>
+  <div class="content-card bio">
+    <%= render partial: 'users/user', locals: { user: @user, size: 80 } %>
+  </div>
+<% end %>

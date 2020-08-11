@@ -5,7 +5,8 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     order = params[:order] || :recent
-    @posts = @user.posts.send(order).page(params[:page])
+    @posts = @user.posts.includes(vote_from: current_user)
+                  .send(order).page(params[:page])
   end
 
   def index

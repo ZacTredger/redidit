@@ -6,5 +6,5 @@
   <% else %>
     <span>Comment deleted by user</span>
   <% end %>
-  <%= tag.a(time_ago_in_words(resource.created_at) + ' ago', href: path) %>
+  <%= tag.span time_ago_in_words(resource.created_at) + ' ago' %>
 </h3>

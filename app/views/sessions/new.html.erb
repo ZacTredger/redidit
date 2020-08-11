@@ -1,4 +1,5 @@
 <% provide :title, 'Log in' %>
+<% provide(:focus_class, 'form log-in') %>
 
 <h1>Log in</h1>
 <%= form_with url: sessions_path, scope: :user, local: true do |f| %>
@@ -11,5 +12,7 @@
     <span>Remember me on this computer</span>
   <% end %>
   <%= f.submit 'Log in', class: 'btn btn-primary' %>
-  <p>New to redidit? <%= link_to 'sign up here!', signup_path %></p>
+  <p class="signup-link">
+    New to redidit? <%= link_to 'sign up here!', signup_path %>
+  </p>
 <% end %>

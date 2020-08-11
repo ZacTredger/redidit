@@ -35,4 +35,7 @@
 yarn-debug.log*
 .yarn-integrity
 .rubocop.yml
+redidit.code-workspace
+.browserslistrc
+/config/browser_sync.yml
 commit_message.txt

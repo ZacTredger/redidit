@@ -1,7 +1,18 @@
-<li class="post-info row">
-  <div class="col-md-11">
-    <%= render partial: 'shared/metadata',
-              locals: { resource: post, path: post_path(post) } %>
-    <%= link_to post.title, post, class: 'post-link' %>
-  </div>
-</li>
+<% title = post.title %>
+<% link = post.link %>
+<article class="votable-row post-row">
+  <%= voting_controls_for(post, self).html %>
+  <hgroup class="votable">
+    <%= render partial: 'shared/metadata', locals: { resource: post } %>
+    <h1 class="post-title">
+      <% if context == :feed %>
+        <%= link_to title, post_path(post), class: 'post-page' %>
+      <% else %>
+        <%= title %>
+      <% end %>
+      <% if link %>
+        <%= link_to humanify(link), link, class: 'external-link', target: :_blank %>
+      <% end %>
+    </h1>
+  </hgroup>
+</article>

@@ -2,6 +2,9 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
   include SessionHelper
   protect_from_forgery with: :exception
+  rescue_from ActiveRecord::RecordNotFound do
+    render 'errors/not_found'
+  end
   rescue_from ActionController::InvalidAuthenticityToken do
     forget current_user
     log_out

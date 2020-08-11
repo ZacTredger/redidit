@@ -1,17 +1,9 @@
-<% title = @post.title %>
-<% link = @post.link %>
-<% provide(:title, title) %>
+<% provide(:title, @post.title) %>
+<% provide(:focus_class, 'post') %>
 
-<div class="post">
-  <% path = post_path(@post) %>
-  <section class="votable-row post-row">
-    <%= voting_controls_for(@post, self).html %>
-    <hgroup class="votable">
-      <%= render partial: 'shared/metadata',
-                locals: { resource: @post, path: path } %>
-      <%= tag.h1(class: 'post-title') { link.blank? ? title : tag.a(title, href: link) } %>
-    </hgroup>
-  </section>
+<div class="post-content">
+  <%= render partial: 'posts/headline_info',
+             locals: { post: @post, context: :post } %>
   <% if @post.body %>
     <div class="post-body">
     <% @post.body.lines.map(&:chomp).each do |paragraph| %>
@@ -27,22 +19,20 @@
   <% end %>
 </div>
 
-<div>
-  <% if user_is_logged_in? %>
-    <%= render partial: 'comments/form' %>
-  <% else %>
-  <div class="members-only">
-    <span>Log in or sign up to leave a comment</span>
-    <ul class="nav">
-      <%= render partial: 'shared/login_signup' %>
-    </ul>
-  </div>
-  <% end %>
+<% if user_is_logged_in? %>
+  <div class="commenting"><%= render partial: 'comments/form' %></div>
+<% else %>
+<div class="members-only">
+  <span>Log in or sign up to leave a comment</span>
+  <ul class="nav">
+    <%= render partial: 'shared/login_signup' %>
+  </ul>
 </div>
+<% end %>
 
 <div class="comments">
   <% @comments.each do |comment| %>
-    <section class="comment-row votable-row">
+    <article class="comment-row votable-row">
       <% if (level = (ancestor = comment).level) > 0 %>
         <div class="reverse-thread-area">
           <% level.times do %>
@@ -56,7 +46,7 @@
       <%= voting_controls_for(comment, self).html %>
       <div class="comment with-comment-<%= comment.id %>" id="<%= comment.id %>">
         <%= render partial: 'shared/metadata',
-                  locals: { resource: comment, path: path } %>
+                  locals: { resource: comment } %>
         <p class="comment-text"><%= comment.text || 'deleted' %></p>
       <% if current_user == comment.user %>
         <div class="comment-actions">
@@ -64,6 +54,6 @@
         </div>
       <% end %>
       </div>
-    </section>
+    </article>
   <% end %>
 </div>

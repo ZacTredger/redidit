@@ -1,9 +1,4 @@
 <% provide :title, "Change rejected (422)" %>
-<% provide :body_class, 'rails-default-error-page'%>
-<div class="dialog">
-  <div>
-    <h1>The change you wanted was rejected.</h1>
-    <p>Maybe you tried to change something you didn't have access to.</p>
-  </div>
-  <p>If you are the application owner check the logs for more information.</p>
-</div>
+<% provide :focus_class, 'error'%>
+<h1>422: You shall not pass!</h1>
+<p>Maybe you tried to change something you didn't have access to.</p>

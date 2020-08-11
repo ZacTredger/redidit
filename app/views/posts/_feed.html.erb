@@ -1,13 +1,11 @@
-<ul class="posts">
-  <% posts.each do |post| %>
-    <%= render partial: 'posts/headline_info', locals: { post: post } %>
-  <% end %>
-</ul>
+<% posts.each do |post| %>
+  <%= render partial: 'posts/headline_info',
+              locals: { post: post, context: :feed } %>
+<% end %>
 
-<div class="pagination">
-  <div class="pagination_info">
+<div class="pagination-container">
+  <div class="pagination-info">
     <%= page_entries_info posts, model: 'post' %>
   </div>
-  <%= will_paginate posts, renderer: BootstrapPagination::Rails,
-                           container: false %>
+  <%= will_paginate posts %>
 </div>

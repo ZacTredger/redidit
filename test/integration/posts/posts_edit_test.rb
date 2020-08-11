@@ -30,8 +30,8 @@ class PostsEditTest < ActionDispatch::IntegrationTest
     get edit_post_path(@post)
     assert_select 'form[action=?]', post_path(@post)
     post_params.each_value { |text| assert_select('input', value: text) }
-    patch post_path(@post), params: { post: updated_post_params }
-    assert_redirected_to post_path(@post)
+    send_update_to_post
+    assert_redirected_to post_path(@post.reload)
     follow_redirect!
     assert_post_contents_displayed
   end
@@ -67,9 +67,9 @@ class PostsEditTest < ActionDispatch::IntegrationTest
     get post_path(@post = user.posts.first)
   end
 
-  # Arbitrarily amends the string values of the post_params hash
+  # Arbitrarily amend the string values of the post_params hash
   def updated_post_params
-    post_params.update(post_params) { |_k, v| v.is_a?(String) ? 'e_' + v : nil }
+    post_params.update(post_params) { |_k, v| v.is_a?(String) ? v + '_e' : nil }
   end
 
   def send_update_to_post

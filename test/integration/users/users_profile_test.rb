@@ -12,7 +12,7 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
     username_regex = /#{user.username}/
     get user_path(user)
     assert_select 'title', count: 1, text: username_regex
-    assert_select 'aside.bio', text: username_regex do |bio|
+    assert_select '.bio', text: username_regex do |bio|
       assert_select bio, '.karma p', text: /7/
     end
   end
@@ -27,16 +27,26 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
     end
     get user_path(user)
     # Catch each list item containing preview info about a post
-    assert_select 'li.post-info', count: 5 do |posts_info|
+    assert_select '.post-row', count: 5 do |posts_info|
       posts_info.each do |post_info|
-        assert_select post_info, 'a.post-link', count: 1 do |(post_link)|
+        assert_select post_info, 'a.post-page', count: 1 do |(post_link)|
           # Remove each matched post from the list so they can't match with
           # multiple elements
           assert post = title_to_post.delete(post_link.text)
           assert_equal post_path(post), post_link['href']
+          # Check user-links are displayed
+          assert_select post_info, 'a.external-link' do |(external_link)|
+            assert_equal 'reddit.com', external_link.text
+            assert_equal post.link, external_link['href']
+          end
           # Check post metadata
           assert_select post_info, 'a[href=?]', user_path(o_p = post.user),
                         text: /#{o_p.username}/
+          # Check vote controls (not upvoted by OP because they're factory-made)
+          %i[up down].each do |direction|
+            assert_select post_info, "##{direction}vote-post-#{post.id}"
+          end
+          assert_select post_info, '.karma', text: '1'
         end
       end
     end
@@ -45,6 +55,6 @@ class UsersProfileTest < ActionDispatch::IntegrationTest
   test 'feed paginates correctly' do
     user = create(:user, :posts, posts_count: 21)
     get user_path(user)
-    assert_select 'li.post-info', count: 20
+    assert_select '.post-row', count: 20
   end
 end

@@ -22,6 +22,15 @@ class PostsNewTest < ActionDispatch::IntegrationTest
     assert_equal @post.user, @post.votes.first.user
   end
 
+  test 'can create post without link, which displays' do
+    log_in
+    get new_post_path
+    assert_difference('Post.count', 1) { make_post link: nil }
+    assert_redirected_to post_path(@post = Post.last)
+    follow_redirect!
+    assert_post_contents_displayed
+  end
+
   test 'multi-paragraph post body displays each para in own p-element' do
     get post_path(@post = create(:post, :multi_paragraph_body))
     @post.body.each_line do |line|
