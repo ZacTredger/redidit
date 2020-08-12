@@ -101,7 +101,7 @@ h3 {
 }
 
 p, div, input, textarea {
-  font-size: 11pt;
+  font-size: 0.88rem;
   margin: 0;
   font-family: Noto Sans, Arial, sans-serif;
 }
@@ -146,15 +146,18 @@ input {
 }
 
 form.button_to {
-  margin: 0 8px;
+  margin: 0 0.4rem;
 }
 
 .btn {
-  margin: 8px 0 0;
   &:hover, &:focus {
     opacity: 0.6;
+    transition: opacity 0.25s;
   }
+  &.link { margin: 0; }
+  &:not(.link) { margin: 8px 0 0; }
 }
+
 
 .btn-primary {
   background-color: $reddit-blue;
@@ -390,7 +393,7 @@ aside {
 /* Metadata */
 .metadata {
   color: $metadata-grey;
-  margin: 0px 8px 8px 0px;
+  margin-bottom: 5px;
   font-size: 14px;
   i, a, span, button, span {
     color: $metadata-grey;
@@ -401,6 +404,10 @@ aside {
 
 .votable-row {
   @extend %row_flex;
+}
+
+.votable {
+  padding: 12px 8px 8px;
 }
 
 .vote-controls {
@@ -519,11 +526,11 @@ div.members-only {
     .threadline-space {
       display: flex;
       align-items: stretch;
-      width: 18px;
+      width: 20px;
       flex-shrink: 0;
       padding: 0;
       .threadline {
-        width: 9px;
+        width: 17px;
         flex-shrink: 0;
         padding: 0;
         border-right: 2px solid $grey-lightest;
@@ -537,12 +544,12 @@ div.members-only {
 
 .comment {
   font-size: 12px;
-  padding: 12px 8px 8px;
   .comment-metadata i, a, span, button {
     font-size: 12px;
   };
   .comment-text {
     padding: 0 2px;
+    line-height: 1.2;
   }
   div {
     padding: 0;

@@ -44,7 +44,8 @@
         </div>
       <% end %>
       <%= voting_controls_for(comment, self).html %>
-      <div class="comment with-comment-<%= comment.id %>" id="<%= comment.id %>">
+      <div class="comment votable with-comment-<%= comment.id %>"
+           id="<%= comment.id %>">
         <%= render partial: 'shared/metadata',
                   locals: { resource: comment } %>
         <p class="comment-text"><%= comment.text || 'deleted' %></p>
