@@ -7,7 +7,6 @@ ruby '2.6.4'
 gem 'bcrypt', '~> 3.1.7'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
-gem 'coffee-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.0'
 # Use Puma as the app server
