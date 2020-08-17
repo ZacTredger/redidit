@@ -9,9 +9,10 @@ guard :minitest, spring: 'bin/rails test', all_on_start: false do
   watch(%r{app/views/layouts/*}) { interface_tests }
   watch(%r{^app/views/shared/.+$}) { integration_tests }
   watch('app/helpers/application_helper.rb') { integration_tests }
+  watch('app/controllers/application_controller.rb') { interface_tests }
 
   # Resources whose tests are named conventionally
-  watch(%r{^app/models/(.*?)\.rb$}) do |matches|
+  watch(%r{^app/models/(.*?)(_[^/]+)?\.rb$}) do |matches|
     "test/models/#{matches[1]}_test.rb"
   end
   watch(%r{^app/mailers/(.*?)\.rb$}) do |matches|
@@ -27,7 +28,7 @@ guard :minitest, spring: 'bin/rails test', all_on_start: false do
     resource_tests(matches[1])
   end
   watch(%r{^app/helpers/(.*?)_helper\.rb$}) do |matches|
-    integration_tests(matches[1])
+    resource_tests(matches[1].pluralize)
   end
 
   # Features that don't map neatly to resources. eg feeds and sessions
@@ -42,13 +43,13 @@ guard :minitest, spring: 'bin/rails test', all_on_start: false do
   watch('app/views/static_pages/home.html.erb') do
     'test/integration/homepage_test.rb'
   end
-  watch(%r{^app/(models|controllers|views|helpers)/comment.*}) do
-    integration_tests('posts')
-  end
   watch(%r{^test/integration/(.*)/.*helper\.rb$}) do |matches|
     integration_tests(matches[1])
   end
-  watch(%r{^app/(helpers/votable_helper|models/vote).rb}) { integration_tests }
+  watch('app/helpers/votable_helper.rb') { resource_tests('vote') }
+  watch(%r{^app/models/votable(_[^/]+)?\.rb$}) do |_matches|
+    Dir['test/models/{comment,post}_test.rb']
+  end
 end
 
 # The integration tests corresponding to the given resource, or all integration
