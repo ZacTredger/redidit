@@ -4,9 +4,14 @@
 
 <%= form_with(model: [@post, @comment], local: true,
               class: 'comment-form') do |f| %>
-  <%= render partial: 'shared/error_messages', locals: { errors: @comment.errors } %>
+  <%= render partial: 'shared/error_messages',
+             locals: { errors: @comment.errors } %>
 
-  <%= f.text_area :text, class: 'form-control' %>
+  <%= f.text_area :text,
+                  class: 'form-control comment-draft',
+                  placeholder: 'Comment here...' %>
 
-  <%= f.submit 'Comment', class: 'btn btn-primary'%>
+  <div class="buttons">
+    <%= f.submit 'Submit', class: 'btn btn-primary'%>
+  </div>
 <% end %>

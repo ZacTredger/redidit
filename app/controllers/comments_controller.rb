@@ -4,9 +4,9 @@ class CommentsController < ApplicationController
   before_action :correct_user, only: %i[destroy]
   def create
     @comment = @post.comments.build(comment_params)
-    @comment = Comment.new if @comment.save
-    order = params[:order] || :recent
-    @comments = @post.comments.includes(:user).send(order)
+    return (redirect_to post_path(@post, comment: @comment.id)) if @comment.save
+
+    @comments = @post.comments.includes(:user).send(params[:order] || :recent)
     render 'posts/show'
   end
 
@@ -30,7 +30,7 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    @comment_params ||= params.require(:comment).permit(:text)
+    @comment_params ||= params.require(:comment).permit(:text, :parent_id)
                               .merge(user_id: current_user.id)
   end
 

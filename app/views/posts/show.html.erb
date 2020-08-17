@@ -1,4 +1,6 @@
+<%= javascript_pack_tag('comments.js') if @comments.any?%>
 <% provide(:title, @post.title) %>
+<% provide(:gon, true) %>
 <% provide(:focus_class, 'post') %>
 
 <div class="post-content">
@@ -20,7 +22,7 @@
 </div>
 
 <% if user_is_logged_in? %>
-  <div class="commenting"><%= render partial: 'comments/form' %></div>
+  <div class="commenting top-level"><%= render partial: 'comments/form' %></div>
 <% else %>
 <div class="members-only">
   <span>Log in or sign up to leave a comment</span>
@@ -32,29 +34,6 @@
 
 <div class="comments">
   <% @comments.each do |comment| %>
-    <article class="comment-row votable-row">
-      <% if (level = (ancestor = comment).level) > 0 %>
-        <div class="reverse-thread-area">
-          <% level.times do %>
-            <% ancestor = ancestor.parent %>
-            <div class="with-comment-<%= ancestor.id %> threadline-space">
-              <div class="threadline"></div>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-      <%= voting_controls_for(comment, self).html %>
-      <div class="comment votable with-comment-<%= comment.id %>"
-           id="<%= comment.id %>">
-        <%= render partial: 'shared/metadata',
-                  locals: { resource: comment } %>
-        <p class="comment-text"><%= comment.text || 'deleted' %></p>
-      <% if current_user == comment.user %>
-        <div class="comment-actions">
-          <%= render partial: 'shared/actions', locals: { resource: comment } %>
-        </div>
-      <% end %>
-      </div>
-    </article>
+    <%= render partial: 'comments/show', locals: { comment: comment } %>
   <% end %>
 </div>

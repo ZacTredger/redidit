@@ -1,0 +1,24 @@
+<article class="comment-row votable-row">
+  <% if (level = (ancestor = comment).level) > 0 %>
+    <div class="reverse-thread-area">
+      <% level.times do %>
+        <% ancestor = ancestor.parent %>
+        <div class="with-comment-<%= ancestor.id %> threadline-space">
+          <div class="threadline"></div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <%= voting_controls_for(comment, self).html %>
+  <div class="comment votable with-comment-<%= comment.id %>"
+        id="<%= comment.id %>">
+    <%= render partial: 'shared/metadata', locals: { resource: comment } %>
+    <p class="comment-text"><%= comment.text || 'deleted' %></p>
+    <p class="comment-actions">
+      <a href="#" class="reply" data-comment-id="<%= comment.id %>">Reply</a>
+      <% if current_user == comment.user %>
+        <%= render partial: 'shared/actions', locals: { resource: comment } %>
+      <% end %>
+    </p>
+  </div>
+</article>

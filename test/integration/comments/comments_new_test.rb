@@ -51,15 +51,30 @@ class CommentsNewTest < ActionDispatch::IntegrationTest
     assert_errors_explained(/([Bb]lank|[Ee]mpty)/)
   end
 
+  test 'can reply to another comment' do
+    log_in
+    get post_path(the_post = (parent = create(:comment)).post)
+    assert_select "##{parent.id} .reply"
+    assert_difference 'the_post.comments.count', 1 do
+      assert_difference 'parent.reload.children.count', 1 do
+        create_comment(the_post, comment: { parent_id: parent.id })
+      end
+    end
+    assert_redirected_to %r{#{post_path(the_post)}(/\?comment=\d+)?}
+    follow_redirect!
+  end
+
   private
 
   def comment_attributes
     @comment_attributes ||= attributes_for(:comment)
   end
 
-  def create_comment
-    post post_comments_path(commentless_post), params:
-          { comment: comment_attributes, post_id: commentless_post.id }
+  def create_comment(the_post = commentless_post, **kwargs)
+    post post_comments_path(the_post), params: {
+      comment: comment_attributes,
+      post_id: the_post.id
+    }.deep_merge(kwargs)
   end
 
   def assert_comment_form_rendered(count: 1)

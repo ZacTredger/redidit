@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get '/sessions', to: 'sessions#new'
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
+  get '/posts/:id/comments', to: 'posts#show'
   get '/404', to: 'errors#not_found'
   get '/422', to: 'errors#unacceptable'
   get '/500', to: 'errors#internal_error'

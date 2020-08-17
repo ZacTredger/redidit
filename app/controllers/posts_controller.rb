@@ -8,6 +8,7 @@ class PostsController < ApplicationController
                     .find_by(id: params[:id]))
       comments
       @comment = @post.comments.build
+      store_comment_to_scroll_to
       return
     end
 
@@ -64,8 +65,13 @@ class PostsController < ApplicationController
   end
 
   def comments
-    @comments ||=
-      @post.comments.includes(:user, vote_from: current_user)
-                    .send(params[:order] || :recent)
+    @comments ||= @post.comments.includes(:user, vote_from: current_user)
+                       .send(params[:order] || :recent)
+  end
+
+  def store_comment_to_scroll_to
+    return unless (comment_id = params.delete(:comment))
+
+    gon.comment_id = comment_id
   end
 end

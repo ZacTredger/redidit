@@ -29,6 +29,8 @@ gem 'jbuilder', '~> 2.7'
 gem 'faker'
 # Pagination
 gem 'will_paginate'
+# Pass data directly to javascript
+gem 'gon'
 
 # Get random records quickly (used during seeding)
 gem 'quick_random_records'
