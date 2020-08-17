@@ -20,9 +20,8 @@ guard :minitest, spring: 'bin/rails test', all_on_start: false do
   watch(%r{^app/views/(.*)_mailer/.*$}) do |matches|
     "test/mailers/#{matches[1]}_mailer_test.rb"
   end
-  watch(%r{^app/controllers/(.*?)_controller\.rb$}) do |(resource)|
-    controller_test(resource)
-    integration_tests(resource == 'users' ? 'users' : 'posts')
+  watch(%r{^app/controllers/(.*?)_controller\.rb$}) do |matches|
+    resource_tests(matches[1])
   end
   watch(%r{^app/views/([^/]*?)/.*\.html\.erb$}) do |matches|
     resource_tests(matches[1])

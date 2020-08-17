@@ -1,6 +1,9 @@
 require 'test_helper'
 
+# Tests voting on both posts and comments by building tests at runtime
 class VotesTest < ActionDispatch::IntegrationTest
+  # Simple wrapper around a post or comment, creating a unified interface for
+  # purposes related to voting
   class VotableDelegator < SimpleDelegator
     delegate :to_s, to: :to_sym
     attr_reader :to_sym, :create_vote_path
@@ -10,18 +13,22 @@ class VotesTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # Needs no special methods
   class CommentDelegator < VotableDelegator; end
 
+  # Ensures that when trying to find the #post that displays this object, it
+  # returns itself
   class PostDelegator < VotableDelegator
     def post
       __getobj__
     end
   end
 
-  Direction = Struct.new(:to_sym, :opposite, :effect, :value) do
-    delegate :to_s, to: :to_sym
-    def vote(opp = nil)
-      { opp ? opposite : to_sym => 1 }
+  # Describes a vote's: direction, opposite-direction, increases/decreases, 1/-1
+  Direction = Struct.new(:_direction, :opposite, :effect, :value) do
+    delegate :to_s, :to_sym, to: :_direction
+    def vote(direction = _direction)
+      { direction => 1 }
     end
   end
 
@@ -115,7 +122,8 @@ class VotesTest < ActionDispatch::IntegrationTest
         define_method "test_#{direction}voting_a_#{direction.opposite}voted"\
                       "_#{delegator}_changes_#{direction.opposite}vote_to"\
                       "_#{direction}vote" do
-          vote = votable(delegator, direction.vote(:opposite)).votes.last
+          vote =
+            votable(delegator, direction.vote(direction.opposite)).votes.last
           log_in as: vote.user
           get page_showing votable
           assert_difference 'votable.reload.karma', 2 * direction.value do

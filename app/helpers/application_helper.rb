@@ -4,7 +4,7 @@ module ApplicationHelper
     site_name = 'Redidit'
     return site_name if title.blank?
 
-    title + ' | ' + site_name
+    "#{title} | #{site_name}"
   end
 
   def document_grid(view)
@@ -27,6 +27,7 @@ module ApplicationHelper
     private
 
     attr_reader :view, :aside_markup
+
     delegate :safe_join, :content_tag, :content_for, :content_for?, to: :view
 
     def contents
