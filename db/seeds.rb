@@ -12,7 +12,7 @@ User.create!(
 )
 
 def usernames_from(franchise)
-  usernames = Faker::Base.fetch_all(franchise + '.characters')
+  usernames = Faker::Base.fetch_all("#{franchise}.characters")
   usernames.map! { |username| username.gsub("'", '').gsub(/[^\w\-]/, '-') }
   usernames.select! { |name| name.length < 21 } || usernames
 end
@@ -26,7 +26,7 @@ names = %w[
 creation_interval = app_age.seconds / names.count
 
 names.each do |name|
-  password = name.sub(' ', '_') + '_password'
+  password = "#{name.sub(' ', '_')}_password"
   created_at = Fake.creation_date(from: latest_signup + 1.second,
                                   to: latest_signup + creation_interval)
   User.create!(
@@ -42,4 +42,4 @@ end
 subs = %w[doggos cats philosophy hacker_help ask_hipster ask_redidit_in_latin
           trees technology dating]
 
-75.times { Fake::PostMaker.send('post_' + subs.sample) }
+75.times { Fake::PostMaker.send("post_#{subs.sample}") }

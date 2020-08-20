@@ -1,6 +1,6 @@
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
-require_relative '../app/helpers/application_helper.rb'
+require_relative '../app/helpers/application_helper'
 require 'rails/test_help'
 require 'minitest/reporters'
 Minitest::Reporters.use!
@@ -49,7 +49,7 @@ module ActiveSupport
     # Confirms that the header contains sign-out but not login or signup links
     def assert_logged_in_header
       assert_select 'a[data-method=delete]', count: 1 do |(logout_link)|
-        assert_match /#{logout_path}/, logout_link[:href]
+        assert_match(/#{logout_path}/, logout_link[:href])
       end
       assert_select 'form[action=?]', login_path, false
       assert_select 'form[action=?]', signup_path, false
