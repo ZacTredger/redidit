@@ -20,7 +20,7 @@ class Comment < ApplicationRecord
   class << self
     def recent
       Comments.recent(where(parent_id: nil).order(created_at: :desc) +
-        where('parent_id NOT null').order(:parent_id, :created_at))
+        where.not(parent_id: nil).order(:parent_id, :created_at))
     end
   end
 
