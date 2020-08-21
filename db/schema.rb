@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2020_03_09_132427) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "comments", force: :cascade do |t|
     t.integer "user_id"
     t.integer "post_id", null: false
@@ -20,8 +23,8 @@ ActiveRecord::Schema.define(version: 2020_03_09_132427) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "karma", default: 0, null: false
-    t.index ["post_id", "created_at"], name: "index_comments_on_post_id_and_created_at", order: { created_at: :desc }, where: "parent_id IS NULL"
-    t.index ["post_id", "parent_id", "created_at"], name: "index_comments_on_post_id_and_parent_id_and_created_at", where: "parent_id IS NOT NULL"
+    t.index ["post_id", "created_at"], name: "index_comments_on_post_id_and_created_at", order: { created_at: :desc }, where: "(parent_id IS NULL)"
+    t.index ["post_id", "parent_id", "created_at"], name: "index_comments_on_post_id_and_parent_id_and_created_at", where: "(parent_id IS NOT NULL)"
   end
 
   create_table "posts", force: :cascade do |t|

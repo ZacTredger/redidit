@@ -31,9 +31,10 @@ gem 'faker'
 gem 'will_paginate'
 # Pass data directly to javascript
 gem 'gon'
-
 # Get random records quickly (used during seeding)
 gem 'quick_random_records'
+# User postgres in all environments to avoid surprises
+gem 'pg'
 
 group :development, :test do
   # Call 'binding.pry' anywhere in the code to stop execution & debug
@@ -43,9 +44,6 @@ group :development, :test do
   gem 'pry-doc'
   gem 'pry-rails'
   gem 'solargraph'
-
-  # Use sqlite3 as the database for Active Record
-  gem 'sqlite3', '~> 1.4'
 end
 
 group :development do
@@ -69,10 +67,6 @@ group :test do
   gem 'minitest'
   gem 'minitest-reporters'
   gem 'rails-controller-testing'
-end
-
-group :production do
-  gem 'pg'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
